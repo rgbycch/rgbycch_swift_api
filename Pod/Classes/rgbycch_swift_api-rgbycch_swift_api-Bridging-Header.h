@@ -20,23 +20,3 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Quick
-import Nimble
-
-import rgbycch_swift_api
-
-class TableOfContentsSpec: QuickSpec {
-    
-    override func spec() {
-        
-        describe("dummy tests") {
-            
-            context("these will pass") {
-
-                it("can do maths") {
-                    expect(23) == 23
-                }
-            }
-        }
-    }
-}

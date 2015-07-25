@@ -12,7 +12,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		607FACE51AFB9204008FA782 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Tests.xctest; path = rgbycch_swift_api_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rgbycch_swift_api_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rgbycch_swift_api_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,7 +49,7 @@
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACE51AFB9204008FA782 /* Tests.xctest */,
+				607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,7 +118,7 @@
 			);
 			name = rgbycch_swift_api_Tests;
 			productName = Tests;
-			productReference = 607FACE51AFB9204008FA782 /* Tests.xctest */;
+			productReference = 607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
