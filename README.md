@@ -20,10 +20,6 @@ it, simply add the following line to your Podfile:
 pod "rgbycch_swift_api"
 ```
 
-## Author
-
-seanoshea, oshea.ie@gmail.com
-
 ## License
 
 rgbycch_swift_api is available under the MIT license. See the LICENSE file for more info.

@@ -10,19 +10,14 @@
 Pod::Spec.new do |s|
   s.name             = "rgbycch_swift_api"
   s.version          = "0.1.0"
-  s.summary          = "A short description of rgbycch_swift_api."
+  s.summary          = "Swift API client for the rgbycch API"
   s.description      = <<-DESC
-                       An optional longer description of rgbycch_swift_api
-
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       Swift API client for the rgbycch API. See the README.md file for installation instructions.
                        DESC
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/rgbycch_swift_api"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/rgbycch/rgbycch_swift_api"
   s.license          = 'MIT'
   s.author           = { "seanoshea" => "oshea.ie@gmail.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/rgbycch_swift_api.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => "https://github.com/rgbycch/rgbycch_swift_api.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '8.0'
   s.requires_arc = true
@@ -31,8 +26,4 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'rgbycch_swift_api' => ['Pod/Assets/*.png']
   }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end
