@@ -1,0 +1,20 @@
+PODS:
+  - Nimble (1.0.0)
+  - Quick (0.3.1)
+  - rgbycch_swift_api (0.1.0)
+
+DEPENDENCIES:
+  - Nimble
+  - Quick (~> 0.3.1)
+  - rgbycch_swift_api (from `../`)
+
+EXTERNAL SOURCES:
+  rgbycch_swift_api:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Nimble: 8bee528e5fcc403653076545db562d2b5db7bb87
+  Quick: 824572d3d198d51e52cf4aa722cebf7e59952a35
+  rgbycch_swift_api: d8d4bff0292b91a366ffe7e5bef42c1ad9689eff
+
+COCOAPODS: 0.38.1
