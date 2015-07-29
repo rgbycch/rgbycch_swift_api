@@ -25,5 +25,10 @@ import Foundation
 class RGBYCCHAPI {
     
     static let sharedInstance = RGBYCCHAPI()
-
+    
+    let url:NSURL
+    
+    init() {
+        url = NSURL(string: "http://localhost:8080")!
+    }
 }
