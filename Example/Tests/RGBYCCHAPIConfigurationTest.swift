@@ -25,16 +25,16 @@ import Nimble
 
 import rgbycch_swift_api
 
-class TableOfContentsSpec: QuickSpec {
+class RGBYCCHAPIConfigurationTest: QuickSpec {
     
     override func spec() {
         
-        describe("dummy tests") {
-            
-            context("these will pass") {
+        describe("RGBYCCHAPIConfiguration") {
 
-                it("can do maths") {
-                    expect(23) == 23
+            context("RGBYCCHAPIConfiguration Configuration Tests") {
+                
+                it("should understand whether or not it is running the unit tests") {
+                    expect(RGBYCCHAPIConfiguration.sharedState.isRunningUnitTests) == true
                 }
             }
         }

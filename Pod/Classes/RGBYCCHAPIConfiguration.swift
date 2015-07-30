@@ -22,12 +22,12 @@
 
 import Foundation
 
-class RGBYCCHAPIConfiguration {
+public class RGBYCCHAPIConfiguration {
     
-    lazy var useLocalServer = true
-    var isRunningUnitTests = false
+    public lazy var useLocalServer = true
+    public var isRunningUnitTests = false
     
-    class var sharedState : RGBYCCHAPIConfiguration {
+    public class var sharedState : RGBYCCHAPIConfiguration {
         struct Static {
             static let instance = RGBYCCHAPIConfiguration()
         }

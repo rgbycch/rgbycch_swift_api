@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */; };
 		35C25FB9F284EF8FE1FFCFFD /* Pods_rgbycch_swift_api_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPIConfigurationTest.swift; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rgbycch_swift_api_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rgbycch_swift_api_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98DFE54612CE855DCC726CC1 /* rgbycch_swift_api.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = rgbycch_swift_api.podspec; path = ../rgbycch_swift_api.podspec; sourceTree = "<group>"; };
 		BC0796DE96F5B598922DD2C0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -217,7 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
