@@ -22,27 +22,21 @@
 
 import Foundation
 
-protocol Path {
-    var path : String { get }
-}
-
-protocol URLPath : Path {
-    var baseURL: NSURL { get }
-}
-
-public enum RGBYCCHAPI {
-    case Player(id: String)
-}
-
-extension RGBYCCHAPI : Path {
-    var path: String {
-        switch self {
-        case .Player: return "/player"
+class RGBYCCHAPIConfiguration {
+    
+    lazy var useLocalServer = true
+    var isRunningUnitTests = false
+    
+    class var sharedState : RGBYCCHAPIConfiguration {
+        struct Static {
+            static let instance = RGBYCCHAPIConfiguration()
         }
+        return Static.instance
     }
-}
-
-extension RGBYCCHAPI : URLPath {
-    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? "http://localhost:8080/rest/v1" : "http://localhost:8080/rest/v1" }
-    public var baseURL: NSURL { return NSURL(string: base)! }
+    
+    init() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        useLocalServer = defaults.boolForKey("RGBYCCHAPIConfigurationUseLocalServer")
+        if let inTests: AnyClass = NSClassFromString("XCTest") { isRunningUnitTests = true }
+    }
 }
