@@ -22,8 +22,33 @@
 
 import Foundation
 
-class RGBYCCHAPI {
-    
-    static let sharedInstance = RGBYCCHAPI()
+struct ServerBaseEndpoints {
+    // TODO: Need to get the REST server hosted
+    static let local = "http://localhost:8080/rest/v1"
+    static let remote = "http://localhost:8080/rest/v1"
+}
 
+protocol Path {
+    var path : String { get }
+}
+
+protocol URLPath : Path {
+    var baseURL: NSURL { get }
+}
+
+public enum RGBYCCHAPI {
+    case Player(id: String)
+}
+
+extension RGBYCCHAPI : Path {
+    var path: String {
+        switch self {
+        case .Player: return "/player"
+        }
+    }
+}
+
+extension RGBYCCHAPI : URLPath {
+    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
+    public var baseURL: NSURL { return NSURL(string: base)! }
 }

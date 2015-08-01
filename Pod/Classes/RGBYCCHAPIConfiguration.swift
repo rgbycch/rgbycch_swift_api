@@ -20,23 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Quick
-import Nimble
+import Foundation
 
-import rgbycch_swift_api
+struct DefaultsKeys {
+    static let RGBYCCHAPIConfigurationUseLocalServerKey = "RGBYCCHAPIConfigurationUseLocalServerKey"
+}
 
-class TableOfContentsSpec: QuickSpec {
+public class RGBYCCHAPIConfiguration {
     
-    override func spec() {
-        
-        describe("dummy tests") {
-            
-            context("these will pass") {
-
-                it("can do maths") {
-                    expect(23) == 23
-                }
-            }
+    public var useLocalServer:Bool
+        {
+        set
+        {
+            NSUserDefaults.standardUserDefaults().setBool(newValue, forKey: DefaultsKeys.RGBYCCHAPIConfigurationUseLocalServerKey)
         }
+        get {
+            return NSUserDefaults.standardUserDefaults().boolForKey(DefaultsKeys.RGBYCCHAPIConfigurationUseLocalServerKey)
+        }
+    }
+    public var isRunningUnitTests = false
+    
+    public class var sharedState : RGBYCCHAPIConfiguration {
+        struct Static {
+            static let instance = RGBYCCHAPIConfiguration()
+        }
+        return Static.instance
+    }
+    
+    init() {
+        if let inTests: AnyClass = NSClassFromString("XCTest") { isRunningUnitTests = true }
     }
 }
