@@ -36,6 +36,20 @@ class RGBYCCHAPIConfigurationTest: QuickSpec {
                 it("should understand whether or not it is running the unit tests") {
                     expect(RGBYCCHAPIConfiguration.sharedState.isRunningUnitTests) == true
                 }
+                
+                it("should know when to target the local server") {
+                    
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "RGBYCCHAPIConfigurationUseLocalServerKey")
+                    
+                    expect(RGBYCCHAPIConfiguration.sharedState.useLocalServer) == true
+                }
+                
+                it("should know when to target the remote server") {
+                    
+                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "RGBYCCHAPIConfigurationUseLocalServerKey")
+                    
+                    expect(RGBYCCHAPIConfiguration.sharedState.useLocalServer) == false
+                }
             }
         }
     }

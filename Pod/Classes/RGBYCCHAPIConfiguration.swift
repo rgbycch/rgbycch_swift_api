@@ -22,9 +22,22 @@
 
 import Foundation
 
+struct DefaultsKeys {
+    static let RGBYCCHAPIConfigurationUseLocalServerKey = "RGBYCCHAPIConfigurationUseLocalServerKey"
+}
+
 public class RGBYCCHAPIConfiguration {
     
-    public lazy var useLocalServer = true
+    public var useLocalServer:Bool
+        {
+        set
+        {
+            NSUserDefaults.standardUserDefaults().setBool(newValue, forKey: DefaultsKeys.RGBYCCHAPIConfigurationUseLocalServerKey)
+        }
+        get {
+            return NSUserDefaults.standardUserDefaults().boolForKey(DefaultsKeys.RGBYCCHAPIConfigurationUseLocalServerKey)
+        }
+    }
     public var isRunningUnitTests = false
     
     public class var sharedState : RGBYCCHAPIConfiguration {
@@ -35,8 +48,6 @@ public class RGBYCCHAPIConfiguration {
     }
     
     init() {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        useLocalServer = defaults.boolForKey("RGBYCCHAPIConfigurationUseLocalServer")
         if let inTests: AnyClass = NSClassFromString("XCTest") { isRunningUnitTests = true }
     }
 }

@@ -4,7 +4,6 @@ use_frameworks!
 
 target 'rgbycch_swift_api_Tests', :exclusive => true do
   pod "rgbycch_swift_api", :path => "../"
-
   pod 'Quick', '~> 0.3.1'
-  pod 'Nimble'
+  pod 'Nimble' 
 end

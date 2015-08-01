@@ -22,6 +22,12 @@
 
 import Foundation
 
+struct ServerBaseEndpoints {
+    // TODO: Need to get the REST server hosted
+    static let local = "http://localhost:8080/rest/v1"
+    static let remote = "http://localhost:8080/rest/v1"
+}
+
 protocol Path {
     var path : String { get }
 }
@@ -43,6 +49,6 @@ extension RGBYCCHAPI : Path {
 }
 
 extension RGBYCCHAPI : URLPath {
-    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? "http://localhost:8080/rest/v1" : "http://localhost:8080/rest/v1" }
+    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
     public var baseURL: NSURL { return NSURL(string: base)! }
 }
