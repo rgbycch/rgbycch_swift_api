@@ -1,6 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '8.0'
 use_frameworks!
 
+pod 'Alamofire', '~> 1.3'
+pod 'SwiftyJSON', '~> 2.2.1'
 
 target 'rgbycch_swift_api_Tests', :exclusive => true do
   pod "rgbycch_swift_api", :path => "../"

@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 import Foundation
+import Alamofire
 
 struct ServerBaseEndpoints {
     // TODO: Need to get the REST server hosted
@@ -30,10 +31,6 @@ struct ServerBaseEndpoints {
 
 protocol Path {
     var path : String { get }
-}
-
-protocol URLPath : Path {
-    var baseURL: NSURL { get }
 }
 
 public enum RGBYCCHAPI {
@@ -46,9 +43,23 @@ extension RGBYCCHAPI : Path {
         case .Player: return "/player"
         }
     }
-}
-
-extension RGBYCCHAPI : URLPath {
     public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
-    public var baseURL: NSURL { return NSURL(string: base)! }
+    public var parameters: [String: AnyObject] {
+        switch self {
+        case .Player(let playerId): return ["id": playerId]
+        }
+    }
+    public var method: Alamofire.Method {
+        switch self {
+        default : return Alamofire.Method.GET
+        }
+    }
+    public var request: Alamofire.Request {
+        return Alamofire.request(.GET, "http://example.com", parameters: ["foo": "bar"])
+            .response { request, response, data, error in
+                println(request)
+                println(response)
+                println(error)
+        }
+    }
 }
