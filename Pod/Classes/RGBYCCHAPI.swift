@@ -38,24 +38,25 @@ public enum RGBYCCHAPI {
 }
 
 extension RGBYCCHAPI : Path {
-    var path: String {
-        switch self {
-        case .Player: return "/player"
-        }
-    }
     public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
-    public var parameters: [String: AnyObject] {
-        switch self {
-        case .Player(let playerId): return ["id": playerId]
-        }
-    }
     public var method: Alamofire.Method {
         switch self {
         default : return Alamofire.Method.GET
         }
     }
+    var path: String {
+        switch self {
+        case .Player(let id):
+            return "/player/\(id)"
+        }
+    }
+    public var parameters: [String: AnyObject] {
+        switch self {
+        default: return ["": ""]
+        }
+    }
     public var request: Alamofire.Request {
-        return Alamofire.request(.GET, "http://example.com", parameters: ["foo": "bar"])
+        return Alamofire.request(self.method, self.base + self.path, parameters: self.parameters)
             .response { request, response, data, error in
                 println(request)
                 println(response)
