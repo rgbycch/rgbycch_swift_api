@@ -22,6 +22,7 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 struct ServerBaseEndpoints {
     // TODO: Need to get the REST server hosted
@@ -29,25 +30,29 @@ struct ServerBaseEndpoints {
     static let remote = "http://localhost:8080/rest/v1"
 }
 
-protocol Path {
-    var path : String { get }
-}
-
 public enum RGBYCCHAPI {
     case Player(id: String)
 }
 
+protocol Path {
+    var base : String { get }
+    var path : String { get }
+}
+
 extension RGBYCCHAPI : Path {
     public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
-    public var method: Alamofire.Method {
-        switch self {
-        default : return Alamofire.Method.GET
-        }
-    }
     var path: String {
         switch self {
         case .Player(let id):
             return "/player/\(id)"
+        }
+    }
+}
+
+extension RGBYCCHAPI {
+    public var method: Alamofire.Method {
+        switch self {
+        default : return Alamofire.Method.GET
         }
     }
     public var parameters: [String: AnyObject] {
@@ -57,10 +62,31 @@ extension RGBYCCHAPI : Path {
     }
     public var request: Alamofire.Request {
         return Alamofire.request(self.method, self.base + self.path, parameters: self.parameters)
-            .response { request, response, data, error in
-                println(request)
-                println(response)
-                println(error)
+    }
+    public var parser: RGBYCCHAPIParser {
+        switch self {
+        case .Player(let id):
+            return RGBYCCHAPIPlayerParser()
+        }
+    }
+}
+
+public class RGBYCCHAPIExecutor {
+    
+    public class var sharedState : RGBYCCHAPIExecutor {
+        struct Static {
+            static let instance = RGBYCCHAPIExecutor()
+        }
+        return Static.instance
+    }
+    
+    public func executeRequest(apiContext:RGBYCCHAPI) {
+        apiContext.request.responseJSON { (req, res, json, error) in
+            if error != nil  {
+                
+            } else {
+                apiContext.parser.parse(JSON(json!))
+            }
         }
     }
 }
