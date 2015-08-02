@@ -21,32 +21,7 @@
 // SOFTWARE.
 
 import Foundation
-import SwiftyJSON
 
-struct PlayerParserConstants {
-    static let identifier = "id"
-    static let firstName = "firstName"
-    static let lastName = "lastName"
-    static let nickName = "nickName"
-    static let primaryPosition = "primaryPosition"
-    static let secondaryPosition = "secondaryPosition"
-    static let tertiaryPosition = "tertiaryPosition"
-    static let teamList = "teamList"
-}
-
-public protocol RGBYCCHAPIParser {
+public class Team {
     
-    func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?)
-}
-
-public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
-    
-    public func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?) {
-        var player = Player()
-        player.identifier = json[PlayerParserConstants.identifier].stringValue
-        player.firstName = json[PlayerParserConstants.firstName].stringValue
-        player.lastName = json[PlayerParserConstants.lastName].stringValue
-        player.nickName = json[PlayerParserConstants.nickName].stringValue
-        return ([player], nil)
-    }
 }
