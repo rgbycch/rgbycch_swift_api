@@ -7,11 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		145448CB1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145448CA1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift */; };
+		145448CE1B700FDF00604A10 /* get_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 145448CD1B700FDF00604A10 /* get_player.json */; };
 		14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */; };
 		35C25FB9F284EF8FE1FFCFFD /* Pods_rgbycch_swift_api_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		145448CA1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPINetworkInterceptor.swift; sourceTree = "<group>"; };
+		145448CD1B700FDF00604A10 /* get_player.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = get_player.json; sourceTree = "<group>"; };
 		14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPIConfigurationTest.swift; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rgbycch_swift_api_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -35,6 +39,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		145448CC1B700FA900604A10 /* TestResources */ = {
+			isa = PBXGroup;
+			children = (
+				145448CD1B700FDF00604A10 /* get_player.json */,
+			);
+			path = TestResources;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -58,7 +70,9 @@
 			isa = PBXGroup;
 			children = (
 				14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */,
+				145448CA1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				145448CC1B700FA900604A10 /* TestResources */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -159,6 +173,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				145448CE1B700FDF00604A10 /* get_player.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				145448CB1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift in Sources */,
 				14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
