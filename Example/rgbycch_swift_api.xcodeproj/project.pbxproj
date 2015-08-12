@@ -12,6 +12,7 @@
 		14B246F91B72B37100312C76 /* RGBYCCHAPITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B246F81B72B37100312C76 /* RGBYCCHAPITest.swift */; };
 		14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */; };
 		35C25FB9F284EF8FE1FFCFFD /* Pods_rgbycch_swift_api_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		80642B8A534B5D829377176A /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE2391E09ED4A0D306352A4E /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rgbycch_swift_api_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98DFE54612CE855DCC726CC1 /* rgbycch_swift_api.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = rgbycch_swift_api.podspec; path = ../rgbycch_swift_api.podspec; sourceTree = "<group>"; };
+		AE2391E09ED4A0D306352A4E /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC0796DE96F5B598922DD2C0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		CB2B221B0FA3281CEBBE3111 /* Pods-rgbycch_swift_api_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rgbycch_swift_api_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-rgbycch_swift_api_Tests/Pods-rgbycch_swift_api_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		FC76CCE51094700734F8A2DF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -35,6 +37,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35C25FB9F284EF8FE1FFCFFD /* Pods_rgbycch_swift_api_Tests.framework in Frameworks */,
+				80642B8A534B5D829377176A /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				64173EBEFB01303FD6BF4C9D /* Pods_rgbycch_swift_api_Tests.framework */,
+				AE2391E09ED4A0D306352A4E /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -225,7 +229,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-rgbycch_swift_api_Tests/Pods-rgbycch_swift_api_Tests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
