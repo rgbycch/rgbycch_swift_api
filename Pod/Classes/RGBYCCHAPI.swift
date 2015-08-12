@@ -55,9 +55,9 @@ extension RGBYCCHAPI {
         default : return Alamofire.Method.GET
         }
     }
-    public var parameters: [String: AnyObject] {
+    public var parameters: [String: AnyObject]? {
         switch self {
-        default: return ["": ""]
+        default: return nil
         }
     }
     public var request: Alamofire.Request {

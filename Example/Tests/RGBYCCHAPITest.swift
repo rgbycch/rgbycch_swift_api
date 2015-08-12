@@ -31,10 +31,6 @@ class RGBYCCHAPITest: QuickSpec {
         
         describe("RGBYCCHAPI") {
             
-            beforeEach({ () -> () in
-                
-            })
-            
             context("Testing Player API calls") {
                 
                 it("should be able to construct the url correctly") {
