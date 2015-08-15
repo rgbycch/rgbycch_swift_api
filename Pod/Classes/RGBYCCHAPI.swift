@@ -73,7 +73,7 @@ extension RGBYCCHAPI {
 
 public class RGBYCCHAPIExecutor {
     
-    public class var sharedState : RGBYCCHAPIExecutor {
+    public class var sharedInstance : RGBYCCHAPIExecutor {
         struct Static {
             static let instance = RGBYCCHAPIExecutor()
         }

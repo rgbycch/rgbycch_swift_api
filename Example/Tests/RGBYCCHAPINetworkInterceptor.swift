@@ -40,20 +40,11 @@ class RGBYCCHAPINetworkInterceptor: NSURLProtocol {
     }
     
     override func startLoading() {
-//        NSString *fileName = responses[self.request.URL.absoluteString];
-//        NSData *data = [NSData dataWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:[fileName stringByDeletingPathExtension] ofType:[fileName pathExtension]]];
-//        
-//        NSURLResponse *response = [[NSURLResponse alloc] initWithURL:self.request.URL
-//            MIMEType:@"text/json"
-//        expectedContentLength:data.length
-//        textEncodingName:@"UTF8"];
-//        [self.client URLProtocol:self
-//        didReceiveResponse:response
-//        cacheStoragePolicy:NSURLCacheStorageNotAllowed];
-//        
-//        
-//        [self.client URLProtocol:self didLoadData:data];
-//        [self.client URLProtocolDidFinishLoading:self];
+        if let url = self.request.URL {
+            if let absoluteURLString = RGBYCCHAPINetworkInterceptor.responses[url.absoluteString!] as? NSString {
+                let fileName = RGBYCCHAPINetworkInterceptor.responses[absoluteURLString] as? NSString
+            }
+        }
     }
     
     override func stopLoading() {

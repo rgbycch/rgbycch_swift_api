@@ -40,6 +40,15 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     expect(playerRequestURLString).to(equal("http://localhost:8080/rest/v1/player/123"))
                 }
+                
+                it("should be able to execute a request to get a player") {
+                    
+                    let playerRequest = RGBYCCHAPI.Player(id: "123")
+
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
+
+                    })
+                }
             }
         }
     }
