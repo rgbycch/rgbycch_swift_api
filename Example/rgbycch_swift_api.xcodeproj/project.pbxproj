@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		145448CB1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 145448CA1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift */; };
 		145448CE1B700FDF00604A10 /* get_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 145448CD1B700FDF00604A10 /* get_player.json */; };
 		14B246F91B72B37100312C76 /* RGBYCCHAPITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B246F81B72B37100312C76 /* RGBYCCHAPITest.swift */; };
 		14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */; };
@@ -16,7 +15,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		145448CA1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPINetworkInterceptor.swift; sourceTree = "<group>"; };
 		145448CD1B700FDF00604A10 /* get_player.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = get_player.json; sourceTree = "<group>"; };
 		14B246F81B72B37100312C76 /* RGBYCCHAPITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPITest.swift; sourceTree = "<group>"; };
 		14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPIConfigurationTest.swift; sourceTree = "<group>"; };
@@ -77,7 +75,6 @@
 			isa = PBXGroup;
 			children = (
 				14E9AB021B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift */,
-				145448CA1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				145448CC1B700FA900604A10 /* TestResources */,
 				14B246F81B72B37100312C76 /* RGBYCCHAPITest.swift */,
@@ -243,7 +240,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				145448CB1B700A5600604A10 /* RGBYCCHAPINetworkInterceptor.swift in Sources */,
 				14B246F91B72B37100312C76 /* RGBYCCHAPITest.swift in Sources */,
 				14E9AB031B6A93060047A1FB /* RGBYCCHAPIConfigurationTest.swift in Sources */,
 			);

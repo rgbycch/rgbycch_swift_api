@@ -22,6 +22,7 @@
 
 import Quick
 import Nimble
+import OHHTTPStubs
 
 import rgbycch_swift_api
 
@@ -30,6 +31,18 @@ class RGBYCCHAPITest: QuickSpec {
     override func spec() {
         
         describe("RGBYCCHAPI") {
+            
+            beforeEach({ () -> () in
+                OHHTTPStubs.stubRequestsPassingTest({$0.URL!.host == "localhost"}) { _ in
+                    let fixture = OHPathForFile("get_player.json", self.dynamicType)
+                    return OHHTTPStubsResponse(fileAtPath: fixture!,
+                        statusCode: 200, headers: ["Content-Type":"application/json"])
+                }
+            })
+            
+            afterEach({ () -> () in
+                OHHTTPStubs.removeAllStubs
+            })
             
             context("Testing Player API calls") {
                 
@@ -44,10 +57,6 @@ class RGBYCCHAPITest: QuickSpec {
                 it("should be able to execute a request to get a player") {
                     
                     let expectation = self.expectationWithDescription("GetPlayerCompletion")
-                    
-                    NSURLProtocol.registerClass(RGBYCCHAPINetworkInterceptor)
-                    
-                    let playerRequest = RGBYCCHAPI.Player(id: "123")
 
                     RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
                         if let error = error {

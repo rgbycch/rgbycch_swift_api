@@ -9,5 +9,6 @@ pod 'SwiftyJSON', '~> 2.2.1'
 target 'rgbycch_swift_api_Tests', :exclusive => true do
   pod "rgbycch_swift_api", :path => "../"
   pod 'Quick', '~> 0.3.1'
-  pod 'Nimble' 
+  pod 'Nimble'
+  pod 'OHHTTPStubs'
 end
