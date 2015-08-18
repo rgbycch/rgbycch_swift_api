@@ -50,7 +50,9 @@ class RGBYCCHAPITest: QuickSpec {
                     let playerRequest = RGBYCCHAPI.Player(id: "123")
 
                     RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
-                        if error == nil {
+                        if let error = error {
+                            XCTFail("api call failed with error: \(error)")
+                        } else {
                             expectation.fulfill()
                         }
                     })
