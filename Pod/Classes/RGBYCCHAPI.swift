@@ -81,6 +81,7 @@ public class RGBYCCHAPIExecutor {
     }
     
     public func executeRequest(apiContext:RGBYCCHAPI, completionBlock:((results:Array<AnyObject>?, error:NSError?) -> Void)) {
+        
         apiContext.request.responseJSON { (req, res, json, error) in
             if error != nil  {
                 completionBlock(results: nil, error:error)

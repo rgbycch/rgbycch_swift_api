@@ -43,11 +43,19 @@ class RGBYCCHAPITest: QuickSpec {
                 
                 it("should be able to execute a request to get a player") {
                     
+                    let expectation = self.expectationWithDescription("GetPlayerCompletion")
+                    
+                    NSURLProtocol.registerClass(RGBYCCHAPINetworkInterceptor)
+                    
                     let playerRequest = RGBYCCHAPI.Player(id: "123")
 
                     RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
-
+                        if error == nil {
+                            expectation.fulfill()
+                        }
                     })
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
             }
         }
