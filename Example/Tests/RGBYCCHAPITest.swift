@@ -68,6 +68,30 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
+                
+                it("should return one player in the response after parsing") {
+                    
+                    let expectation = self.expectationWithDescription("GetPlayerCompletion")
+                    
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
+                        if let error = error {
+                            XCTFail("api call failed with error: \(error)")
+                        } else {
+                            if let players = results as? [Player] {
+                                let player:Player = players[0]
+                                expect(player.firstName).to(equal("Tom"))
+                                expect(player.lastName).to(equal("Thumb"))
+                                expect(player.nickName).to(equal("Big Tom"))
+                                expect(player.identifier).to(equal("123"))
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed with error: \(error)")                                
+                            }
+                        }
+                    })
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
             }
         }
     }

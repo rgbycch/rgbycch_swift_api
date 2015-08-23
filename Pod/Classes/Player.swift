@@ -27,12 +27,12 @@ public enum Position {
 }
 
 public class Player {
-    var firstName:String = ""
-    var identifier:String = ""
-    var lastName:String = ""
-    var nickName:String = ""
-    var primaryPosition:Position?
-    var secondaryPosition:Position?
-    var tertiaryPosition:Position?
-    var teamList:Array<Team>?
+    public var firstName:String = ""
+    public var identifier:String = ""
+    public var lastName:String = ""
+    public var nickName:String = ""
+    public var primaryPosition:Position?
+    public var secondaryPosition:Position?
+    public var tertiaryPosition:Position?
+    public var teamList:Array<Team>?
 }
