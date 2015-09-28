@@ -3,7 +3,5 @@ use_frameworks!
 
 
 target 'rgbycch_swift_api_Tests', :exclusive => true do
-  pod "rgbycch_swift_api", :path => "../"
-
-  
+  pod "rgbycch_swift_api", :path => "../"  
 end

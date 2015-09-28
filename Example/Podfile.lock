@@ -1,5 +1,11 @@
 PODS:
-  - rgbycch_swift_api (0.1.0)
+  - Alamofire (3.0.0-beta.3)
+  - rgbycch_swift_api (0.1.0):
+    - rgbycch_swift_api/Deps (= 0.1.0)
+  - rgbycch_swift_api/Deps (0.1.0):
+    - Alamofire (~> 3.0.0-beta.3)
+    - SwiftyJSON (~> 2.3.0)
+  - SwiftyJSON (2.3.0)
 
 DEPENDENCIES:
   - rgbycch_swift_api (from `../`)
@@ -9,6 +15,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  rgbycch_swift_api: acb578c2ee66bc77e8e03d5f804ec0a5a6d32472
+  Alamofire: c89149e58431f6f94527e8c01f920456afe39bd0
+  rgbycch_swift_api: d8a9eef269e1044c5f0bc42e4ab5bb8e6b975b0d
+  SwiftyJSON: 8d6b61a70277ef2a5d710d372e06e7e2d87fb9e4
 
 COCOAPODS: 0.38.2

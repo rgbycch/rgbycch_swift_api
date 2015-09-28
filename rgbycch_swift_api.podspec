@@ -15,15 +15,19 @@ Pod::Spec.new do |s|
                        Swift API client for the rgbycch API. See the README.md file for installation instructions.
                        DESC
   s.homepage         = "https://github.com/rgbycch/rgbycch_swift_api"
-  s.license          = 'MIT'
+  s.license          = "MIT"
   s.author           = { "seanoshea" => "oshea.ie@gmail.com" }
   s.source           = { :git => "https://github.com/rgbycch/rgbycch_swift_api.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '8.0'
   s.requires_arc = true
-
-  s.source_files = 'Pod/Classes/**/*'
+  s.default_subspec = "Deps"
+  s.subspec "Deps" do |deps|
+    deps.dependency	"Alamofire", "~> 3.0.0-beta.3"
+    deps.dependency	"SwiftyJSON", "~> 2.3.0"
+  end
+  s.source_files = "Pod/Classes/**/*"
   s.resource_bundles = {
-    'rgbycch_swift_api' => ['Pod/Assets/*.png']
+    "rgbycch_swift_api" => ["Pod/Assets/*.png"]
   }
 end
