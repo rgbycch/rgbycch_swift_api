@@ -77,6 +77,9 @@ public class RGBYCCHAPIExecutor {
         struct Static {
             static let instance = RGBYCCHAPIExecutor()
         }
+        let apiVersionHeader = "application/vnd.rgbycch.v" + RGBYCCHAPIConfiguration.sharedState.apiVersion
+        let additionalHeaders: [NSObject : AnyObject] = ["Accept": apiVersionHeader]
+        Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders = additionalHeaders
         return Static.instance
     }
     

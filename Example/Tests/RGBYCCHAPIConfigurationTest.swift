@@ -51,13 +51,6 @@ class RGBYCCHAPIConfigurationTest: QuickSpec {
                     expect(RGBYCCHAPIConfiguration.sharedState.useLocalServer) == false
                 }
                 
-                it("should know to use v1 of the API service by default") {
-                    
-                    NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "RGBYCCHAPIConfigurationAPIVersion")
-                    
-                    expect(RGBYCCHAPIConfiguration.sharedState.apiVersion) == "1"
-                }
-                
                 it("should know if the client has specified a different version of the API service") {
 
                     NSUserDefaults.standardUserDefaults().setObject("2.2", forKey: "RGBYCCHAPIConfigurationAPIVersion")
