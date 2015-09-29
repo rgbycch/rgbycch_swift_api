@@ -23,11 +23,24 @@
 import Foundation
 
 struct DefaultsKeys {
+    static let RGBYCCHAPIConfigurationAPIVersion = "RGBYCCHAPIConfigurationAPIVersion"
     static let RGBYCCHAPIConfigurationUseLocalServerKey = "RGBYCCHAPIConfigurationUseLocalServerKey"
 }
 
+let RGBYCCHAPIConfigurationDefaultAPIVersionValue = "1"
+
 public class RGBYCCHAPIConfiguration {
     
+    public var apiVersion:String
+        {
+        set
+        {
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: DefaultsKeys.RGBYCCHAPIConfigurationAPIVersion)
+        }
+        get {
+            return NSUserDefaults.standardUserDefaults().stringForKey(DefaultsKeys.RGBYCCHAPIConfigurationAPIVersion) ?? RGBYCCHAPIConfigurationDefaultAPIVersionValue
+        }
+    }
     public var useLocalServer:Bool
         {
         set
