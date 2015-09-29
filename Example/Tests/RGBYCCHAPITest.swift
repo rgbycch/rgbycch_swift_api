@@ -33,10 +33,15 @@ class RGBYCCHAPITest: QuickSpec {
         describe("RGBYCCHAPI") {
             
             beforeEach({ () -> () in
-                OHHTTPStubs.stubRequestsPassingTest({$0.URL!.host == "api.rgbycch-rest.dev"}) { _ in
-                    let fixture = OHPathForFile("get_player.json", self.dynamicType)
-                    return OHHTTPStubsResponse(fileAtPath: fixture!,
-                        statusCode: 200, headers: ["Content-Type":"application/json"])
+                let map = ["http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
+                    "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
+                    "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json"]
+                for (absoluteString, fileName) in map {
+                    OHHTTPStubs.stubRequestsPassingTest({$0.URL!.absoluteString == absoluteString}) { _ in
+                        let fixture = OHPathForFile(fileName, self.dynamicType)
+                        return OHHTTPStubsResponse(fileAtPath: fixture!,
+                            statusCode: 200, headers: ["Content-Type" : "application/json"])
+                    }
                 }
             })
             
@@ -46,19 +51,35 @@ class RGBYCCHAPITest: QuickSpec {
             
             context("Testing Player API calls") {
                 
-                it("should be able to construct the url correctly") {
+                it("should be able to construct the url correctly for a GetPlayerById call") {
                     
-                    let playerRequest = RGBYCCHAPI.Player(id: "123").request
+                    let playerRequest = RGBYCCHAPI.GetPlayerById(id: "123").request
                     let playerRequestURLString = playerRequest.request?.URL?.absoluteString
                     
                     expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players/123.json"))
                 }
                 
+                it("should be able to construct the url correctly for a GetPlayersByIds call") {
+
+                    let playerRequest = RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]).request
+                    let playerRequestURLString = playerRequest.request?.URL?.absoluteString
+                    
+                    expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players?player_ids=123%2C456"))
+                }
+                
+                it("should be able to construct the url correctly for a SearchPlayersByKeyword call") {
+                    
+                    let playerRequest = RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg").request
+                    let playerRequestURLString = playerRequest.request?.URL?.absoluteString
+                    
+                    expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players?keyword=rugg"))
+                }
+                
                 it("should be able to execute a request to get a player") {
                     
-                    let expectation = self.expectationWithDescription("GetPlayerCompletion")
+                    let expectation = self.expectationWithDescription("GetPlayerByIdCompletion")
 
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results, error) -> Void in
                         if let error = error {
                             XCTFail("api call failed with error: \(error)")
                         } else {
@@ -69,11 +90,41 @@ class RGBYCCHAPITest: QuickSpec {
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
                 
-                it("should return one player in the response after parsing") {
+                it("should be able to execute a request to get a list of players by id") {
+                    
+                    let expectation = self.expectationWithDescription("GetPlayersByIdsCompletion")
+                    
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results, error) -> Void in
+                        if let error = error {
+                            XCTFail("api call failed with error: \(error)")
+                        } else {
+                            expectation.fulfill()
+                        }
+                    })
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to search for a list of players by keyword") {
+                
+                    let expectation = self.expectationWithDescription("SearchPlayersByIdsCompletion")
+                    
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results, error) -> Void in
+                        if let error = error {
+                            XCTFail("api call failed with error: \(error)")
+                        } else {
+                            expectation.fulfill()
+                        }
+                    })
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one player for a get player by id request after parsing") {
                     
                     let expectation = self.expectationWithDescription("GetPlayerCompletion")
                     
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.Player(id: "123"), completionBlock: { (results, error) -> Void in
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results, error) -> Void in
                         if let error = error {
                             XCTFail("api call failed with error: \(error)")
                         } else {
@@ -89,6 +140,46 @@ class RGBYCCHAPITest: QuickSpec {
                                 expectation.fulfill()
                             } else {
                                 XCTFail("api call failed with error: \(error)")                                
+                            }
+                        }
+                    })
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return two players when searching by multiple ids") {
+                    
+                    let expectation = self.expectationWithDescription("GetPlayersByIdsCompletion")
+                    
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results, error) -> Void in
+                        if let error = error {
+                            XCTFail("api call failed with error: \(error)")
+                        } else {
+                            if let players = results as? [Player] {
+                                XCTAssert(players.count == 2)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed with error: \(error)")
+                            }
+                        }
+                    })
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should one player when searching by keyword") {
+                    
+                    let expectation = self.expectationWithDescription("SearchPlayersByIdsCompletion")
+                    
+                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results, error) -> Void in
+                        if let error = error {
+                            XCTFail("api call failed with error: \(error)")
+                        } else {
+                            if let players = results as? [Player] {
+                                XCTAssert(players.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed with error: \(error)")
                             }
                         }
                     })

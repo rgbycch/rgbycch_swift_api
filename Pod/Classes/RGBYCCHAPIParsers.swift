@@ -32,6 +32,7 @@ struct PlayerParserConstants {
     static let email = "email"
     static let phone_number = "phone_number"
     static let teams = "teams"
+    static let players = "players"
 }
 
 public protocol RGBYCCHAPIParser {
@@ -42,6 +43,10 @@ public protocol RGBYCCHAPIParser {
 public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?) {
+        return ([self.parsePlayer(json)], nil)
+    }
+    
+    public func parsePlayer (json:JSON) -> Player {
         let player = Player()
         player.identifier = json[PlayerParserConstants.identifier].int32Value
         player.firstName = json[PlayerParserConstants.firstName].stringValue
@@ -50,6 +55,20 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
         player.dob = json[PlayerParserConstants.dob].stringValue
         player.email = json[PlayerParserConstants.email].stringValue
         player.phoneNumber = json[PlayerParserConstants.phone_number].stringValue
-        return ([player], nil)
+        return player
+    }
+}
+
+public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
+    
+    public func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?) {
+        let playerParser = RGBYCCHAPIPlayerParser()
+        let players = json[PlayerParserConstants.players].arrayValue
+        var parsedPlayers:Array<AnyObject> = []
+        for entry in players {
+            let player = playerParser.parsePlayer(entry)
+            parsedPlayers.append(player)
+        }
+        return (parsedPlayers, nil)
     }
 }

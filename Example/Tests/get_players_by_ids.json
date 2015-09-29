@@ -1,0 +1,24 @@
+{
+    "players": [
+                {
+                "id": 123,
+                "first_name": "Tom",
+                "last_name": "Thumb",
+                "nick_name": "Thumber",
+                "dob": "2015-09-17T10:24:05.000Z",
+                "email": "tom@rgbycch.com",
+                "phone_number": "123456789",
+                "teams": []
+                },
+                {
+                "id": 456,
+                "first_name": "Jim",
+                "last_name": "Riddle",
+                "nick_name": "Riddler",
+                "dob": "2015-09-17T10:24:05.000Z",
+                "email": "jim@jim.com",
+                "phone_number": "9976543221",
+                "teams": []
+                }
+                ]
+}

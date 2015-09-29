@@ -31,7 +31,10 @@ struct ServerBaseEndpoints {
 }
 
 public enum RGBYCCHAPI {
-    case Player(id: String)
+    // players
+    case GetPlayerById(id: String)
+    case GetPlayersByIds(ids: Array<String>)
+    case SearchPlayersByKeyword(keyword: String)
 }
 
 protocol Path {
@@ -43,8 +46,12 @@ extension RGBYCCHAPI : Path {
     public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
     var path: String {
         switch self {
-        case .Player(let id):
+        case .GetPlayerById(let id):
             return "/players/\(id).json"
+        case .GetPlayersByIds(ids: _):
+            return "/players"
+        case .SearchPlayersByKeyword(keyword: _):
+            return "/players"
         }
     }
 }
@@ -57,16 +64,33 @@ extension RGBYCCHAPI {
     }
     public var parameters: [String: AnyObject]? {
         switch self {
+        case .GetPlayersByIds(let ids) :
+            return ["player_ids": ids.joinWithSeparator(",")]
+        case .SearchPlayersByKeyword(let keyword) :
+            return ["keyword": keyword]
         default: return nil
         }
     }
+    public var encoding: ParameterEncoding {
+        switch self {
+        default: return .URL
+        }
+    }
+    public var headers: [String: String]? {
+        let apiVersionHeader = "application/vnd.rgbycch.v" + RGBYCCHAPIConfiguration.sharedState.apiVersion
+        return ["Accept": apiVersionHeader]
+    }
     public var request: Alamofire.Request {
-        return Alamofire.request(self.method, self.base + self.path, parameters: self.parameters)
+        return Alamofire.request(self.method, self.base + self.path, parameters: self.parameters, encoding: self.encoding, headers:self.headers)
     }
     public var parser: RGBYCCHAPIParser {
         switch self {
-        case .Player(_):
+        case .GetPlayerById(_):
             return RGBYCCHAPIPlayerParser()
+        case .GetPlayersByIds(_):
+            return RGBYCCHAPIPlayersParser()
+        case .SearchPlayersByKeyword(_):
+            return RGBYCCHAPIPlayersParser()
         }
     }
 }
@@ -77,9 +101,6 @@ public class RGBYCCHAPIExecutor {
         struct Static {
             static let instance = RGBYCCHAPIExecutor()
         }
-        let apiVersionHeader = "application/vnd.rgbycch.v" + RGBYCCHAPIConfiguration.sharedState.apiVersion
-        let additionalHeaders: [NSObject : AnyObject] = ["Accept": apiVersionHeader]
-        Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders = additionalHeaders
         return Static.instance
     }
     
