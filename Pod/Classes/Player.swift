@@ -23,9 +23,12 @@
 import Foundation
 
 public class Player {
+    public var identifier:Int32 = 0
     public var firstName:String = ""
-    public var identifier:String = ""
     public var lastName:String = ""
     public var nickName:String = ""
+    public var dob:String = ""
+    public var email:String = ""
+    public var phoneNumber:String = ""
     public var teams:Array<Team>?
 }

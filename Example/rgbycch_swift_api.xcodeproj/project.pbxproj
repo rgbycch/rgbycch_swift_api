@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		418D001D1BB9F1DE00E245FD /* RGBYCCHAPIConfigurationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418D001B1BB9F1DE00E245FD /* RGBYCCHAPIConfigurationTest.swift */; settings = {ASSET_TAGS = (); }; };
 		418D001E1BB9F1DE00E245FD /* RGBYCCHAPITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418D001C1BB9F1DE00E245FD /* RGBYCCHAPITest.swift */; settings = {ASSET_TAGS = (); }; };
+		418D00201BBA64FB00E245FD /* get_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 418D001F1BBA64FB00E245FD /* get_player.json */; settings = {ASSET_TAGS = (); }; };
 		D79ED8A14C0948FA3F196272 /* Pods_rgbycch_swift_api_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDDA0CD935EF58D9F95DE613 /* Pods_rgbycch_swift_api_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -17,6 +18,7 @@
 		2B906AE33790765E8F6069D4 /* rgbycch_swift_api.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = rgbycch_swift_api.podspec; path = ../rgbycch_swift_api.podspec; sourceTree = "<group>"; };
 		418D001B1BB9F1DE00E245FD /* RGBYCCHAPIConfigurationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPIConfigurationTest.swift; sourceTree = "<group>"; };
 		418D001C1BB9F1DE00E245FD /* RGBYCCHAPITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPITest.swift; sourceTree = "<group>"; };
+		418D001F1BBA64FB00E245FD /* get_player.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = get_player.json; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rgbycch_swift_api_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CDDA0CD935EF58D9F95DE613 /* Pods_rgbycch_swift_api_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rgbycch_swift_api_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACEA1AFB9204008FA782 /* Info.plist */,
+				418D001F1BBA64FB00E245FD /* get_player.json */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -163,6 +166,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				418D00201BBA64FB00E245FD /* get_player.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

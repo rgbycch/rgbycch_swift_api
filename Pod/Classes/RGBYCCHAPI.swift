@@ -26,8 +26,8 @@ import SwiftyJSON
 
 struct ServerBaseEndpoints {
     // TODO: Need to get the REST server hosted
-    static let local = "http://localhost:8080/rest/v1"
-    static let remote = "http://localhost:8080/rest/v1"
+    static let local = "http://api.rgbycch-rest.dev"
+    static let remote = "http://api.rgbycch-rest.dev"
 }
 
 public enum RGBYCCHAPI {
@@ -44,7 +44,7 @@ extension RGBYCCHAPI : Path {
     var path: String {
         switch self {
         case .Player(let id):
-            return "/player/\(id)"
+            return "/players/\(id).json"
         }
     }
 }
@@ -82,10 +82,10 @@ public class RGBYCCHAPIExecutor {
     
     public func executeRequest(apiContext:RGBYCCHAPI, completionBlock:((results:Array<AnyObject>?, error:NSError?) -> Void)) {
         apiContext.request.responseJSON { response in
-            
             switch response.result {
             case .Success:
-                completionBlock(apiContext.parser.parse(JSON(response.data!)))
+                let json = JSON.init(data: response.data!, options: NSJSONReadingOptions.AllowFragments, error: nil)
+                completionBlock(apiContext.parser.parse(json))
             case .Failure(let error):
                 completionBlock(results: nil, error:error)
             }

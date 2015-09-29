@@ -33,7 +33,7 @@ class RGBYCCHAPITest: QuickSpec {
         describe("RGBYCCHAPI") {
             
             beforeEach({ () -> () in
-                OHHTTPStubs.stubRequestsPassingTest({$0.URL!.host == "localhost"}) { _ in
+                OHHTTPStubs.stubRequestsPassingTest({$0.URL!.host == "api.rgbycch-rest.dev"}) { _ in
                     let fixture = OHPathForFile("get_player.json", self.dynamicType)
                     return OHHTTPStubsResponse(fileAtPath: fixture!,
                         statusCode: 200, headers: ["Content-Type":"application/json"])
@@ -51,7 +51,7 @@ class RGBYCCHAPITest: QuickSpec {
                     let playerRequest = RGBYCCHAPI.Player(id: "123").request
                     let playerRequestURLString = playerRequest.request?.URL?.absoluteString
                     
-                    expect(playerRequestURLString).to(equal("http://localhost:8080/rest/v1/player/123"))
+                    expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players/123.json"))
                 }
                 
                 it("should be able to execute a request to get a player") {
@@ -79,10 +79,13 @@ class RGBYCCHAPITest: QuickSpec {
                         } else {
                             if let players = results as? [Player] {
                                 let player:Player = players[0]
-                                expect(player.firstName).to(equal("Tom"))
-                                expect(player.lastName).to(equal("Thumb"))
-                                expect(player.nickName).to(equal("Big Tom"))
-                                expect(player.identifier).to(equal("123"))
+                                expect(player.identifier).to(equal(1))
+                                expect(player.firstName).to(equal("Blanda"))
+                                expect(player.lastName).to(equal("Kutch"))
+                                expect(player.nickName).to(equal("Gerry"))
+                                expect(player.dob).to(equal("2015-09-17T10:24:05.000Z"))
+                                expect(player.email).to(equal("adonis@brakus.com"))
+                                expect(player.phoneNumber).to(equal("123456789"))
                                 expectation.fulfill()
                             } else {
                                 XCTFail("api call failed with error: \(error)")                                

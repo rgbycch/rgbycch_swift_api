@@ -28,6 +28,9 @@ struct PlayerParserConstants {
     static let firstName = "first_name"
     static let lastName = "last_name"
     static let nickName = "nick_name"
+    static let dob = "dob"
+    static let email = "email"
+    static let phone_number = "phone_number"
     static let teams = "teams"
 }
 
@@ -40,10 +43,13 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?) {
         let player = Player()
-        player.identifier = json[PlayerParserConstants.identifier].stringValue
+        player.identifier = json[PlayerParserConstants.identifier].int32Value
         player.firstName = json[PlayerParserConstants.firstName].stringValue
         player.lastName = json[PlayerParserConstants.lastName].stringValue
         player.nickName = json[PlayerParserConstants.nickName].stringValue
+        player.dob = json[PlayerParserConstants.dob].stringValue
+        player.email = json[PlayerParserConstants.email].stringValue
+        player.phoneNumber = json[PlayerParserConstants.phone_number].stringValue
         return ([player], nil)
     }
 }
