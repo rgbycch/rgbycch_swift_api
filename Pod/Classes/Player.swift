@@ -30,5 +30,5 @@ public class Player {
     public var dob:String = ""
     public var email:String = ""
     public var phoneNumber:String = ""
-    public var teams:Array<Team>?
+    public var teams:[Team]?
 }

@@ -33,7 +33,7 @@ struct ServerBaseEndpoints {
 public enum RGBYCCHAPI {
     // players
     case GetPlayerById(id: String)
-    case GetPlayersByIds(ids: Array<String>)
+    case GetPlayersByIds(ids: [String])
     case SearchPlayersByKeyword(keyword: String)
 }
 
@@ -104,7 +104,7 @@ public class RGBYCCHAPIExecutor {
         return Static.instance
     }
     
-    public func executeRequest(apiContext:RGBYCCHAPI, completionBlock:((results:Array<AnyObject>?, error:NSError?) -> Void)) {
+    public func executeRequest(apiContext:RGBYCCHAPI, completionBlock:((results:[AnyObject]?, error:NSError?) -> Void)) {
         apiContext.request.responseJSON { response in
             switch response.result {
             case .Success:

@@ -37,12 +37,12 @@ struct PlayerParserConstants {
 
 public protocol RGBYCCHAPIParser {
     
-    func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?)
+    func parse (json:JSON) -> (results:[AnyObject]?, error:NSError?)
 }
 
 public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
-    public func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?) {
+    public func parse (json:JSON) -> (results:[AnyObject]?, error:NSError?) {
         return ([self.parsePlayer(json)], nil)
     }
     
@@ -61,7 +61,7 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
 
 public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
     
-    public func parse (json:JSON) -> (results:Array<AnyObject>?, error:NSError?) {
+    public func parse (json:JSON) -> (results:[AnyObject]?, error:NSError?) {
         let playerParser = RGBYCCHAPIPlayerParser()
         let players = json[PlayerParserConstants.players].arrayValue
         var parsedPlayers:Array<AnyObject> = []
