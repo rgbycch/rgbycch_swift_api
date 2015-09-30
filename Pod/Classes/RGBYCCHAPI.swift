@@ -108,11 +108,14 @@ public class RGBYCCHAPIExecutor {
         apiContext.request.responseJSON { response in
             switch response.result {
             case .Success:
-                let json = JSON.init(data: response.data!, options: NSJSONReadingOptions.AllowFragments, error: nil)
-                let parsedResult = try! apiContext.parser.parse(json)
-                completionBlock(results:parsedResult)
+                if let unwrappedData = response.data {
+                    let json = JSON.init(data: unwrappedData, options: NSJSONReadingOptions.AllowFragments, error: nil)
+                    let parsedResult = try! apiContext.parser.parse(json)
+                    completionBlock(results:parsedResult)
+                } else {
+                    completionBlock(results:nil)
+                }
             case .Failure(_):
-                // throw error
                 completionBlock(results:nil)
             }
         }
