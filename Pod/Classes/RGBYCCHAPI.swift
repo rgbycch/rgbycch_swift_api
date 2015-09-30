@@ -109,9 +109,10 @@ public class RGBYCCHAPIExecutor {
             switch response.result {
             case .Success:
                 let json = JSON.init(data: response.data!, options: NSJSONReadingOptions.AllowFragments, error: nil)
-                completionBlock(apiContext.parser.parse(json))
+                let parsedResult = try! apiContext.parser.parse(json)
+                completionBlock(results:parsedResult, error:nil)
             case .Failure(let error):
-                completionBlock(results: nil, error:error)
+                completionBlock(results:nil, error:error)
             }
         }
     }

@@ -23,6 +23,11 @@
 import Foundation
 import SwiftyJSON
 
+enum RGBYCCHAPIParserError: ErrorType {
+    case RGBYCCHAPIParserEmptyResponse
+    case RGBYCCHAPIParserInvalidFieldType
+}
+
 struct PlayerParserConstants {
     static let identifier = "id"
     static let firstName = "first_name"
@@ -37,13 +42,13 @@ struct PlayerParserConstants {
 
 public protocol RGBYCCHAPIParser {
     
-    func parse (json:JSON) -> (results:[AnyObject]?, error:NSError?)
+    func parse(json:JSON) throws -> ([AnyObject]?)
 }
 
 public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
-    public func parse (json:JSON) -> (results:[AnyObject]?, error:NSError?) {
-        return ([self.parsePlayer(json)], nil)
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        return ([self.parsePlayer(json)])
     }
     
     public func parsePlayer (json:JSON) -> Player {
@@ -61,7 +66,7 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
 
 public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
     
-    public func parse (json:JSON) -> (results:[AnyObject]?, error:NSError?) {
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
         let playerParser = RGBYCCHAPIPlayerParser()
         let players = json[PlayerParserConstants.players].arrayValue
         var parsedPlayers:Array<AnyObject> = []
@@ -69,6 +74,6 @@ public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
             let player = playerParser.parsePlayer(entry)
             parsedPlayers.append(player)
         }
-        return (parsedPlayers, nil)
+        return (parsedPlayers)
     }
 }
