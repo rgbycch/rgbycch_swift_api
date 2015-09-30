@@ -104,15 +104,16 @@ public class RGBYCCHAPIExecutor {
         return Static.instance
     }
     
-    public func executeRequest(apiContext:RGBYCCHAPI, completionBlock:((results:[AnyObject]?, error:NSError?) -> Void)) {
+    public func executeRequest(apiContext:RGBYCCHAPI, completionBlock:((results:[AnyObject]?) -> Void)) throws {
         apiContext.request.responseJSON { response in
             switch response.result {
             case .Success:
                 let json = JSON.init(data: response.data!, options: NSJSONReadingOptions.AllowFragments, error: nil)
                 let parsedResult = try! apiContext.parser.parse(json)
-                completionBlock(results:parsedResult, error:nil)
-            case .Failure(let error):
-                completionBlock(results:nil, error:error)
+                completionBlock(results:parsedResult)
+            case .Failure(_):
+                // throw error
+                completionBlock(results:nil)
             }
         }
     }

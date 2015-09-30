@@ -28,16 +28,16 @@ enum RGBYCCHAPIParserError: ErrorType {
     case RGBYCCHAPIParserInvalidFieldType
 }
 
-struct PlayerParserConstants {
-    static let identifier = "id"
-    static let firstName = "first_name"
-    static let lastName = "last_name"
-    static let nickName = "nick_name"
-    static let dob = "dob"
-    static let email = "email"
-    static let phone_number = "phone_number"
-    static let teams = "teams"
-    static let players = "players"
+enum PlayerParserConstants : String {
+    case identifier = "id"
+    case firstName = "first_name"
+    case lastName = "last_name"
+    case nickName = "nick_name"
+    case dob = "dob"
+    case email = "email"
+    case phone_number = "phone_number"
+    case teams = "teams"
+    case players = "players"
 }
 
 public protocol RGBYCCHAPIParser {
@@ -53,13 +53,13 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parsePlayer (json:JSON) -> Player {
         let player = Player()
-        player.identifier = json[PlayerParserConstants.identifier].int32Value
-        player.firstName = json[PlayerParserConstants.firstName].stringValue
-        player.lastName = json[PlayerParserConstants.lastName].stringValue
-        player.nickName = json[PlayerParserConstants.nickName].stringValue
-        player.dob = json[PlayerParserConstants.dob].stringValue
-        player.email = json[PlayerParserConstants.email].stringValue
-        player.phoneNumber = json[PlayerParserConstants.phone_number].stringValue
+        player.identifier = json[PlayerParserConstants.identifier.rawValue].int32Value
+        player.firstName = json[PlayerParserConstants.firstName.rawValue].stringValue
+        player.lastName = json[PlayerParserConstants.lastName.rawValue].stringValue
+        player.nickName = json[PlayerParserConstants.nickName.rawValue].stringValue
+        player.dob = json[PlayerParserConstants.dob.rawValue].stringValue
+        player.email = json[PlayerParserConstants.email.rawValue].stringValue
+        player.phoneNumber = json[PlayerParserConstants.phone_number.rawValue].stringValue
         return player
     }
 }
@@ -68,7 +68,7 @@ public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
     
     public func parse(json:JSON) throws -> ([AnyObject]?) {
         let playerParser = RGBYCCHAPIPlayerParser()
-        let players = json[PlayerParserConstants.players].arrayValue
+        let players = json[PlayerParserConstants.players.rawValue].arrayValue
         var parsedPlayers:Array<AnyObject> = []
         for entry in players {
             let player = playerParser.parsePlayer(entry)

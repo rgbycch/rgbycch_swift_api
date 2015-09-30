@@ -79,13 +79,13 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     let expectation = self.expectationWithDescription("GetPlayerByIdCompletion")
 
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results, error) -> Void in
-                        if let error = error {
-                            XCTFail("api call failed with error: \(error)")
-                        } else {
-                            expectation.fulfill()
-                        }
-                    })
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results) -> Void in
+                                expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
@@ -94,13 +94,13 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     let expectation = self.expectationWithDescription("GetPlayersByIdsCompletion")
                     
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results, error) -> Void in
-                        if let error = error {
-                            XCTFail("api call failed with error: \(error)")
-                        } else {
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results) -> Void in
                             expectation.fulfill()
-                        }
-                    })
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
@@ -108,26 +108,21 @@ class RGBYCCHAPITest: QuickSpec {
                 it("should be able to execute a request to search for a list of players by keyword") {
                 
                     let expectation = self.expectationWithDescription("SearchPlayersByIdsCompletion")
-                    
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results, error) -> Void in
-                        if let error = error {
-                            XCTFail("api call failed with error: \(error)")
-                        } else {
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results) -> Void in
                             expectation.fulfill()
-                        }
-                    })
-                    
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
                 
                 it("should return one player for a get player by id request after parsing") {
                     
                     let expectation = self.expectationWithDescription("GetPlayerCompletion")
-                    
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results, error) -> Void in
-                        if let error = error {
-                            XCTFail("api call failed with error: \(error)")
-                        } else {
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 let player:Player = players[0]
                                 expect(player.identifier).to(equal(1))
@@ -139,11 +134,12 @@ class RGBYCCHAPITest: QuickSpec {
                                 expect(player.phoneNumber).to(equal("123456789"))
                                 expectation.fulfill()
                             } else {
-                                XCTFail("api call failed with error: \(error)")                                
+                                XCTFail("api call failed")
                             }
-                        }
-                    })
-                    
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
                 
@@ -151,18 +147,18 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     let expectation = self.expectationWithDescription("GetPlayersByIdsCompletion")
                     
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results, error) -> Void in
-                        if let error = error {
-                            XCTFail("api call failed with error: \(error)")
-                        } else {
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 XCTAssert(players.count == 2)
                                 expectation.fulfill()
                             } else {
-                                XCTFail("api call failed with error: \(error)")
+                                XCTFail("api call failed")
                             }
-                        }
-                    })
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
@@ -171,18 +167,18 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     let expectation = self.expectationWithDescription("SearchPlayersByIdsCompletion")
                     
-                    RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results, error) -> Void in
-                        if let error = error {
-                            XCTFail("api call failed with error: \(error)")
-                        } else {
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 XCTAssert(players.count == 1)
                                 expectation.fulfill()
                             } else {
-                                XCTFail("api call failed with error: \(error)")
+                                XCTFail("api call failed")
                             }
-                        }
-                    })
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
