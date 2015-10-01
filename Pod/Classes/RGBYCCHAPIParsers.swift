@@ -28,13 +28,21 @@ enum RGBYCCHAPIParserError: ErrorType {
     case RGBYCCHAPIParserInvalidFieldType
 }
 
-enum PlayerParserConstants : String {
+enum CommonParserConstants : String {
     case identifier = "id"
+    case user = "user"
+    case email = "email"
+}
+
+enum UserParserConstants : String {
+    case authToken = "auth_token"
+}
+
+enum PlayerParserConstants : String {
     case firstName = "first_name"
     case lastName = "last_name"
     case nickName = "nick_name"
     case dob = "dob"
-    case email = "email"
     case phone_number = "phone_number"
     case teams = "teams"
     case players = "players"
@@ -45,6 +53,17 @@ public protocol RGBYCCHAPIParser {
     func parse(json:JSON) throws -> ([AnyObject]?)
 }
 
+public class RGBYCCHAPIUserParser : RGBYCCHAPIParser {
+
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let user = User()
+        user.identifier = json[CommonParserConstants.user.rawValue][CommonParserConstants.identifier.rawValue].int32Value
+        user.email = json[CommonParserConstants.user.rawValue][CommonParserConstants.email.rawValue].stringValue
+        user.authToken = json[CommonParserConstants.user.rawValue][UserParserConstants.authToken.rawValue].stringValue
+        return ([user])
+    }
+}
+
 public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parse(json:JSON) throws -> ([AnyObject]?) {
@@ -53,12 +72,12 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parsePlayer (json:JSON) -> Player {
         let player = Player()
-        player.identifier = json[PlayerParserConstants.identifier.rawValue].int32Value
+        player.identifier = json[CommonParserConstants.identifier.rawValue].int32Value
         player.firstName = json[PlayerParserConstants.firstName.rawValue].stringValue
         player.lastName = json[PlayerParserConstants.lastName.rawValue].stringValue
         player.nickName = json[PlayerParserConstants.nickName.rawValue].stringValue
         player.dob = json[PlayerParserConstants.dob.rawValue].stringValue
-        player.email = json[PlayerParserConstants.email.rawValue].stringValue
+        player.email = json[CommonParserConstants.email.rawValue].stringValue
         player.phoneNumber = json[PlayerParserConstants.phone_number.rawValue].stringValue
         return player
     }

@@ -33,7 +33,9 @@ class RGBYCCHAPITest: QuickSpec {
         describe("RGBYCCHAPI") {
             
             beforeEach({ () -> () in
-                let map = ["http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
+                let map = [
+                    "http://api.rgbycch-rest.dev/sessions.json" : "create_session.json",
+                    "http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
                     "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
                     "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json"]
                 for (absoluteString, fileName) in map {
@@ -48,6 +50,54 @@ class RGBYCCHAPITest: QuickSpec {
             afterEach({ () -> () in
                 OHHTTPStubs.removeAllStubs()
             })
+            
+            context("Testing Session API calls") {
+                
+                it("should be able to construct the url correctly for a create session call") {
+
+                    let sessionRequest = RGBYCCHAPI.CreateSession(email: "email", password: "password").request
+                    let sessionRequestURLString = sessionRequest.request?.URL?.absoluteString
+                    
+                    expect(sessionRequestURLString).to(equal("http://api.rgbycch-rest.dev/sessions.json"))
+                }
+                
+                it("should be able to execute a request to create a session") {
+                    
+                    let expectation = self.expectationWithDescription("CreateSessionCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateSession(email: "email", password: "password"), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one user for a create session call after parsing") {
+                    
+                    let expectation = self.expectationWithDescription("CreateSessionCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateSession(email: "email", password: "password"), completionBlock: { (results) -> Void in
+                            if let users = results as? [User] {
+                                let user:User = users[0]
+                                expect(user.identifier).to(equal(1))
+                                expect(user.email).to(equal("tom@rgbycch.com"))
+                                expect(user.authToken).to(equal("JV6hahPkdAT7fiaJjnsH"))
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+
+            }
             
             context("Testing Player API calls") {
                 

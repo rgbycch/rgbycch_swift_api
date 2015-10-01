@@ -30,6 +30,8 @@ enum RGBYCCHAPIServerBaseEndpoints : String {
 }
 
 public enum RGBYCCHAPI {
+    // sessions
+    case CreateSession(email: String, password: String)
     // players
     case GetPlayerById(id: String)
     case GetPlayersByIds(ids: [String])
@@ -45,6 +47,8 @@ extension RGBYCCHAPI : Path {
     public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? RGBYCCHAPIServerBaseEndpoints.local.rawValue : RGBYCCHAPIServerBaseEndpoints.remote.rawValue }
     var path: String {
         switch self {
+        case .CreateSession(_, _):
+            return "/sessions.json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
         case .GetPlayersByIds(ids: _):
@@ -58,11 +62,15 @@ extension RGBYCCHAPI : Path {
 extension RGBYCCHAPI {
     public var method: Alamofire.Method {
         switch self {
+        case .CreateSession(_, _):
+            return Alamofire.Method.POST
         default : return Alamofire.Method.GET
         }
     }
     public var parameters: [String: AnyObject]? {
         switch self {
+        case .CreateSession(let email, let password):
+            return ["session": ["email": email, "password": password]]
         case .GetPlayersByIds(let ids) :
             return ["player_ids": ids.joinWithSeparator(",")]
         case .SearchPlayersByKeyword(let keyword) :
@@ -72,6 +80,8 @@ extension RGBYCCHAPI {
     }
     public var encoding: ParameterEncoding {
         switch self {
+        case .CreateSession(_, _):
+            return .JSON
         default: return .URL
         }
     }
@@ -85,6 +95,8 @@ extension RGBYCCHAPI {
     }
     public var parser: RGBYCCHAPIParser {
         switch self {
+        case .CreateSession(_, _):
+            return RGBYCCHAPIUserParser()
         case .GetPlayerById(_):
             return RGBYCCHAPIPlayerParser()
         case .GetPlayersByIds(_):

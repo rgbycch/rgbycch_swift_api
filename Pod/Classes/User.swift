@@ -23,6 +23,7 @@
 import Foundation
 
 public class User {
+    public var identifier:Int32 = 0
     public var email:String = ""
     public var authToken:String = ""
 }
