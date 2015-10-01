@@ -24,10 +24,9 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-struct ServerBaseEndpoints {
-    // TODO: Need to get the REST server hosted
-    static let local = "http://api.rgbycch-rest.dev"
-    static let remote = "http://api.rgbycch-rest.dev"
+enum RGBYCCHAPIServerBaseEndpoints : String {
+    case local = "http://api.rgbycch-rest.devv"
+    case remote = "http://api.rgbycch-rest.dev"
 }
 
 public enum RGBYCCHAPI {
@@ -43,7 +42,7 @@ protocol Path {
 }
 
 extension RGBYCCHAPI : Path {
-    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? ServerBaseEndpoints.local : ServerBaseEndpoints.remote }
+    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? RGBYCCHAPIServerBaseEndpoints.local.rawValue : RGBYCCHAPIServerBaseEndpoints.remote.rawValue }
     var path: String {
         switch self {
         case .GetPlayerById(let id):
@@ -78,7 +77,8 @@ extension RGBYCCHAPI {
     }
     public var headers: [String: String]? {
         let apiVersionHeader = "application/vnd.rgbycch.v" + RGBYCCHAPIConfiguration.sharedState.apiVersion
-        return ["Accept": apiVersionHeader]
+        let headers = ["Accept": apiVersionHeader]
+        return headers
     }
     public var request: Alamofire.Request {
         return Alamofire.request(self.method, self.base + self.path, parameters: self.parameters, encoding: self.encoding, headers:self.headers)
