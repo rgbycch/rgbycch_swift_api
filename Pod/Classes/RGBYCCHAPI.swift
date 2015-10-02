@@ -87,8 +87,16 @@ extension RGBYCCHAPI {
     }
     public var headers: [String: String]? {
         let apiVersionHeader = "application/vnd.rgbycch.v" + RGBYCCHAPIConfiguration.sharedState.apiVersion
-        let headers = ["Accept": apiVersionHeader]
-        return headers
+        switch self {
+            case .CreateSession(_, _):
+            return ["Accept" : apiVersionHeader]
+        default:
+            if let currentUser = RGBYCCHAPICurrentUser.sharedInstance.user {
+                return ["Accept" : apiVersionHeader, "Authorization" : currentUser.authToken]
+            } else {
+                return ["Accept" : apiVersionHeader]
+            }
+        }
     }
     public var request: Alamofire.Request {
         return Alamofire.request(self.method, self.base + self.path, parameters: self.parameters, encoding: self.encoding, headers:self.headers)
@@ -131,5 +139,17 @@ public class RGBYCCHAPIExecutor {
                 completionBlock(results:nil)
             }
         }
+    }
+}
+
+public class RGBYCCHAPICurrentUser {
+    
+    var user:User?
+    
+    public class var sharedInstance : RGBYCCHAPICurrentUser {
+        struct Static {
+            static let instance = RGBYCCHAPICurrentUser()
+        }
+        return Static.instance
     }
 }
