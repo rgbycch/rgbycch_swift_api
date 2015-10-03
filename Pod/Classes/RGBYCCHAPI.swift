@@ -36,6 +36,7 @@ public enum RGBYCCHAPI {
     case GetPlayerById(id: String)
     case GetPlayersByIds(ids: [String])
     case SearchPlayersByKeyword(keyword: String)
+    case CreatePlayer(firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
 }
 
 protocol Path {
@@ -51,10 +52,11 @@ extension RGBYCCHAPI : Path {
             return "/sessions.json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
-        case .GetPlayersByIds(ids: _):
+        case .GetPlayersByIds(_),
+        .SearchPlayersByKeyword(_):
             return "/players"
-        case .SearchPlayersByKeyword(keyword: _):
-            return "/players"
+        case .CreatePlayer(_, _, _, _, _, _):
+            return "/players.json"
         }
     }
 }
@@ -62,7 +64,8 @@ extension RGBYCCHAPI : Path {
 extension RGBYCCHAPI {
     public var method: Alamofire.Method {
         switch self {
-        case .CreateSession(_, _):
+        case .CreateSession(_, _),
+        .CreatePlayer(_, _, _, _, _, _):
             return Alamofire.Method.POST
         default : return Alamofire.Method.GET
         }
@@ -75,6 +78,8 @@ extension RGBYCCHAPI {
             return ["player_ids": ids.joinWithSeparator(",")]
         case .SearchPlayersByKeyword(let keyword) :
             return ["keyword": keyword]
+        case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
+            return ["first_name": firstName, "last_name": lastName, "nick_name": nickName, "dob": dob, "email": email, "phone_number": phoneNumber]
         default: return nil
         }
     }
@@ -105,11 +110,11 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
-        case .GetPlayerById(_):
+        case .GetPlayerById(_),
+        .CreatePlayer(_, _, _, _, _, _):
             return RGBYCCHAPIPlayerParser()
-        case .GetPlayersByIds(_):
-            return RGBYCCHAPIPlayersParser()
-        case .SearchPlayersByKeyword(_):
+        case .GetPlayersByIds(_),
+        .SearchPlayersByKeyword(_):
             return RGBYCCHAPIPlayersParser()
         }
     }

@@ -60,6 +60,7 @@ public class RGBYCCHAPIUserParser : RGBYCCHAPIParser {
         user.identifier = json[CommonParserConstants.user.rawValue][CommonParserConstants.identifier.rawValue].int32Value
         user.email = json[CommonParserConstants.user.rawValue][CommonParserConstants.email.rawValue].stringValue
         user.authToken = json[CommonParserConstants.user.rawValue][UserParserConstants.authToken.rawValue].stringValue
+        RGBYCCHAPICurrentUser.sharedInstance.user = user;
         return ([user])
     }
 }
