@@ -97,3 +97,10 @@ public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
         return (parsedPlayers)
     }
 }
+
+public class RGBYCCHAPIDeletionParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        return (nil)
+    }
+}

@@ -38,7 +38,9 @@ class RGBYCCHAPITest: QuickSpec {
                     "http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
                     "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
                     "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json",
-                    "http://api.rgbycch-rest.dev/players.json" : "create_player.json"]
+                    "http://api.rgbycch-rest.dev/players.json" : "create_player.json",
+                    "http://api.rgbycch-rest.dev/players/789.json" : "delete_player.json",
+                    "http://api.rgbycch-rest.dev/players/456.json" : "update_player.json"]
                 for (absoluteString, fileName) in map {
                     OHHTTPStubs.stubRequestsPassingTest({$0.URL!.absoluteString == absoluteString}) { _ in
                         let fixture = OHPathForFile(fileName, self.dynamicType)
@@ -142,6 +144,14 @@ class RGBYCCHAPITest: QuickSpec {
                     expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players/456.json"))
                 }
                 
+                it("should be able to construct the url correctly for a DeletePlayer call") {
+                    
+                    let playerRequest = RGBYCCHAPI.DeletePlayer(id: 789).request
+                    let playerRequestURLString = playerRequest.request?.URL?.absoluteString
+                    
+                    expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players/789.json"))
+                }
+                
                 it("should be able to execute a request to get a player") {
                     
                     let expectation = self.expectationWithDescription("GetPlayerByIdCompletion")
@@ -203,6 +213,19 @@ class RGBYCCHAPITest: QuickSpec {
                     let expectation = self.expectationWithDescription("UpdatePlayerCompletion")
                     do {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdatePlayer(id: 456, firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to delete an existing player") {
+                    
+                    let expectation = self.expectationWithDescription("DeletePlayerCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.DeletePlayer(id: 789), completionBlock: { (results) -> Void in
                             expectation.fulfill()
                         })
                     } catch {

@@ -38,6 +38,7 @@ public enum RGBYCCHAPI {
     case SearchPlayersByKeyword(keyword: String)
     case CreatePlayer(firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
     case UpdatePlayer(id: Int32, firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
+    case DeletePlayer(id: Int32)
 }
 
 protocol Path {
@@ -58,6 +59,8 @@ extension RGBYCCHAPI : Path {
         case .GetPlayersByIds(_),
         .SearchPlayersByKeyword(_):
             return "/players"
+        case .DeletePlayer(let id):
+            return "/players/\(id).json"
         case .CreatePlayer(_, _, _, _, _, _):
             return "/players.json"
         }
@@ -72,6 +75,8 @@ extension RGBYCCHAPI {
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _):
             return Alamofire.Method.PATCH
+        case .DeletePlayer(_):
+            return Alamofire.Method.DELETE
         default : return Alamofire.Method.GET
         }
     }
@@ -125,7 +130,8 @@ extension RGBYCCHAPI {
             return RGBYCCHAPIUserParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
-        .UpdatePlayer(_, _, _, _, _, _, _):
+        .UpdatePlayer(_, _, _, _, _, _, _),
+        .DeletePlayer(_):
             return RGBYCCHAPIPlayerParser()
         case .GetPlayersByIds(_),
         .SearchPlayersByKeyword(_):
@@ -162,9 +168,7 @@ public class RGBYCCHAPIExecutor {
 }
 
 public class RGBYCCHAPICurrentUser {
-    
     var user:User?
-    
     public class var sharedInstance : RGBYCCHAPICurrentUser {
         struct Static {
             static let instance = RGBYCCHAPICurrentUser()
