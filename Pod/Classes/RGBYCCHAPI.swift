@@ -33,10 +33,11 @@ public enum RGBYCCHAPI {
     // sessions
     case CreateSession(email: String, password: String)
     // players
-    case GetPlayerById(id: String)
-    case GetPlayersByIds(ids: [String])
+    case GetPlayerById(id: Int32)
+    case GetPlayersByIds(ids: [Int32])
     case SearchPlayersByKeyword(keyword: String)
     case CreatePlayer(firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
+    case UpdatePlayer(id: Int32, firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
 }
 
 protocol Path {
@@ -51,6 +52,8 @@ extension RGBYCCHAPI : Path {
         case .CreateSession(_, _):
             return "/sessions.json"
         case .GetPlayerById(let id):
+            return "/players/\(id).json"
+        case .UpdatePlayer(let id, _, _, _, _, _, _):
             return "/players/\(id).json"
         case .GetPlayersByIds(_),
         .SearchPlayersByKeyword(_):
@@ -67,6 +70,8 @@ extension RGBYCCHAPI {
         case .CreateSession(_, _),
         .CreatePlayer(_, _, _, _, _, _):
             return Alamofire.Method.POST
+        case .UpdatePlayer(_, _, _, _, _, _, _):
+            return Alamofire.Method.PATCH
         default : return Alamofire.Method.GET
         }
     }
@@ -75,17 +80,25 @@ extension RGBYCCHAPI {
         case .CreateSession(let email, let password):
             return ["session": ["email": email, "password": password]]
         case .GetPlayersByIds(let ids) :
-            return ["player_ids": ids.joinWithSeparator(",")]
+            let stringifiedIds = ids.map({
+                (number) -> String in
+                return String(number)
+            })
+            return ["player_ids": stringifiedIds.joinWithSeparator(",")]
         case .SearchPlayersByKeyword(let keyword) :
             return ["keyword": keyword]
         case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
+            return ["first_name": firstName, "last_name": lastName, "nick_name": nickName, "dob": dob, "email": email, "phone_number": phoneNumber]
+        case .UpdatePlayer(_, let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
             return ["first_name": firstName, "last_name": lastName, "nick_name": nickName, "dob": dob, "email": email, "phone_number": phoneNumber]
         default: return nil
         }
     }
     public var encoding: ParameterEncoding {
         switch self {
-        case .CreateSession(_, _):
+        case .CreateSession(_, _),
+        .CreatePlayer(_, _, _, _, _, _),
+        .UpdatePlayer(_, _, _, _, _, _, _):
             return .JSON
         default: return .URL
         }
@@ -111,7 +124,8 @@ extension RGBYCCHAPI {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
         case .GetPlayerById(_),
-        .CreatePlayer(_, _, _, _, _, _):
+        .CreatePlayer(_, _, _, _, _, _),
+        .UpdatePlayer(_, _, _, _, _, _, _):
             return RGBYCCHAPIPlayerParser()
         case .GetPlayersByIds(_),
         .SearchPlayersByKeyword(_):

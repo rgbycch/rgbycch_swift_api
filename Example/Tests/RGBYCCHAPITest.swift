@@ -104,7 +104,7 @@ class RGBYCCHAPITest: QuickSpec {
                 
                 it("should be able to construct the url correctly for a GetPlayerById call") {
                     
-                    let playerRequest = RGBYCCHAPI.GetPlayerById(id: "123").request
+                    let playerRequest = RGBYCCHAPI.GetPlayerById(id: 123).request
                     let playerRequestURLString = playerRequest.request?.URL?.absoluteString
                     
                     expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players/123.json"))
@@ -112,7 +112,7 @@ class RGBYCCHAPITest: QuickSpec {
                 
                 it("should be able to construct the url correctly for a GetPlayersByIds call") {
 
-                    let playerRequest = RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]).request
+                    let playerRequest = RGBYCCHAPI.GetPlayersByIds(ids: [123, 456]).request
                     let playerRequestURLString = playerRequest.request?.URL?.absoluteString
                     
                     expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players?player_ids=123%2C456"))
@@ -134,12 +134,20 @@ class RGBYCCHAPITest: QuickSpec {
                     expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players.json"))
                 }
                 
+                it("should be able to construct the url correctly for a UpdatePlayer call") {
+                    
+                    let playerRequest = RGBYCCHAPI.UpdatePlayer(id: 456, firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f").request
+                    let playerRequestURLString = playerRequest.request?.URL?.absoluteString
+                    
+                    expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players/456.json"))
+                }
+                
                 it("should be able to execute a request to get a player") {
                     
                     let expectation = self.expectationWithDescription("GetPlayerByIdCompletion")
 
                     do {
-                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results) -> Void in
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: 123), completionBlock: { (results) -> Void in
                                 expectation.fulfill()
                         })
                     } catch {
@@ -154,7 +162,7 @@ class RGBYCCHAPITest: QuickSpec {
                     let expectation = self.expectationWithDescription("GetPlayersByIdsCompletion")
                     
                     do {
-                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results) -> Void in
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: [123, 456]), completionBlock: { (results) -> Void in
                             expectation.fulfill()
                         })
                     } catch {
@@ -190,11 +198,24 @@ class RGBYCCHAPITest: QuickSpec {
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
                 
+                it("should be able to execute a request to update an existing player") {
+                    
+                    let expectation = self.expectationWithDescription("UpdatePlayerCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdatePlayer(id: 456, firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
                 it("should return one player for a get player by id request after parsing") {
                     
                     let expectation = self.expectationWithDescription("GetPlayerCompletion")
                     do {
-                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: "123"), completionBlock: { (results) -> Void in
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayerById(id: 123), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 let player:Player = players[0]
                                 expect(player.identifier).to(equal(1))
@@ -220,7 +241,7 @@ class RGBYCCHAPITest: QuickSpec {
                     let expectation = self.expectationWithDescription("GetPlayersByIdsCompletion")
                     
                     do {
-                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: ["123", "456"]), completionBlock: { (results) -> Void in
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetPlayersByIds(ids: [123, 456]), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 XCTAssert(players.count == 2)
                                 expectation.fulfill()
@@ -261,6 +282,26 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     do {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
+                            if let players = results as? [Player] {
+                                XCTAssert(players.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one player when updating a player") {
+                    
+                    let expectation = self.expectationWithDescription("UpdatePlayerCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdatePlayer(id: 456, firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 XCTAssert(players.count == 1)
                                 expectation.fulfill()
