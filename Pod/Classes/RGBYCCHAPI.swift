@@ -130,12 +130,13 @@ extension RGBYCCHAPI {
             return RGBYCCHAPIUserParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
-        .UpdatePlayer(_, _, _, _, _, _, _),
         .DeletePlayer(_):
             return RGBYCCHAPIPlayerParser()
         case .GetPlayersByIds(_),
         .SearchPlayersByKeyword(_):
             return RGBYCCHAPIPlayersParser()
+        case .UpdatePlayer(_, _, _, _, _, _, _):
+            return RGBYCCHAPIUpdatePlayerParser()
         }
     }
 }

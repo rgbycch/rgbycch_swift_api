@@ -46,6 +46,7 @@ enum PlayerParserConstants : String {
     case phone_number = "phone_number"
     case teams = "teams"
     case players = "players"
+    case player = "player"
 }
 
 public protocol RGBYCCHAPIParser {
@@ -73,11 +74,14 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parsePlayer (json:JSON) -> Player {
         let player = Player()
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "YYYY-mm-dd'T'HH:mm:ss'.000Z'"
         player.identifier = json[CommonParserConstants.identifier.rawValue].int32Value
         player.firstName = json[PlayerParserConstants.firstName.rawValue].stringValue
         player.lastName = json[PlayerParserConstants.lastName.rawValue].stringValue
         player.nickName = json[PlayerParserConstants.nickName.rawValue].stringValue
-        player.dob = json[PlayerParserConstants.dob.rawValue].stringValue
+        let dateString = json[PlayerParserConstants.dob.rawValue].stringValue
+        player.dob = formatter.dateFromString(dateString)!
         player.email = json[CommonParserConstants.email.rawValue].stringValue
         player.phoneNumber = json[PlayerParserConstants.phone_number.rawValue].stringValue
         return player
@@ -102,5 +106,14 @@ public class RGBYCCHAPIDeletionParser : RGBYCCHAPIParser {
     
     public func parse(json:JSON) throws -> ([AnyObject]?) {
         return (nil)
+    }
+}
+
+public class RGBYCCHAPIUpdatePlayerParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let playerParser = RGBYCCHAPIPlayerParser()
+        let player = playerParser.parsePlayer(json[PlayerParserConstants.player.rawValue])
+        return ([player])
     }
 }

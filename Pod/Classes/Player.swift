@@ -27,7 +27,7 @@ public class Player {
     public var firstName:String = ""
     public var lastName:String = ""
     public var nickName:String = ""
-    public var dob:String = ""
+    public var dob:NSDate = NSDate()
     public var email:String = ""
     public var phoneNumber:String = ""
     public var teams:[Team]?

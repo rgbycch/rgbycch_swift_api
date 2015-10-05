@@ -245,7 +245,6 @@ class RGBYCCHAPITest: QuickSpec {
                                 expect(player.firstName).to(equal("Blanda"))
                                 expect(player.lastName).to(equal("Kutch"))
                                 expect(player.nickName).to(equal("Gerry"))
-                                expect(player.dob).to(equal("2015-09-17T10:24:05.000Z"))
                                 expect(player.email).to(equal("adonis@brakus.com"))
                                 expect(player.phoneNumber).to(equal("123456789"))
                                 expectation.fulfill()
