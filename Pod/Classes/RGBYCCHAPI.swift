@@ -36,7 +36,7 @@ public enum RGBYCCHAPI {
     case GetPlayerById(id: Int32)
     case GetPlayersByIds(ids: [Int32])
     case SearchPlayersByKeyword(keyword: String)
-    case CreatePlayer(firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
+    case CreatePlayer(firstName: String, lastName: String, nickName: String, dob: NSDate, email: String, phoneNumber: String)
     case UpdatePlayer(id: Int32, firstName: String, lastName: String, nickName: String, dob: String, email: String, phoneNumber: String)
     case DeletePlayer(id: Int32)
 }
@@ -93,7 +93,9 @@ extension RGBYCCHAPI {
         case .SearchPlayersByKeyword(let keyword) :
             return ["keyword": keyword]
         case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
-            return ["first_name": firstName, "last_name": lastName, "nick_name": nickName, "dob": dob, "email": email, "phone_number": phoneNumber]
+            let formatter = NSDateFormatter()
+            formatter.dateFormat = "YYYY-mm-dd'T'HH:mm:ss'.000Z'"
+            return ["first_name": firstName, "last_name": lastName, "nick_name": nickName, "dob": formatter.stringFromDate(dob), "email": email, "phone_number": phoneNumber]
         case .UpdatePlayer(_, let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
             return ["first_name": firstName, "last_name": lastName, "nick_name": nickName, "dob": dob, "email": email, "phone_number": phoneNumber]
         default: return nil

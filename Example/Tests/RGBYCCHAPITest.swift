@@ -130,7 +130,7 @@ class RGBYCCHAPITest: QuickSpec {
                 
                 it("should be able to construct the url correctly for a CreatePlayer call") {
                     
-                    let playerRequest = RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f").request
+                    let playerRequest = RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: NSDate(), email: "e", phoneNumber: "f").request
                     let playerRequestURLString = playerRequest.request?.URL?.absoluteString
                     
                     expect(playerRequestURLString).to(equal("http://api.rgbycch-rest.dev/players.json"))
@@ -199,7 +199,7 @@ class RGBYCCHAPITest: QuickSpec {
                     
                     let expectation = self.expectationWithDescription("CreatePlayerCompletion")
                     do {
-                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: NSDate(), email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
                             expectation.fulfill()
                         })
                     } catch {
@@ -303,7 +303,7 @@ class RGBYCCHAPITest: QuickSpec {
                     let expectation = self.expectationWithDescription("CreatePlayerCompletion")
                     
                     do {
-                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: "d", email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreatePlayer(firstName: "a", lastName: "b", nickName: "c", dob: NSDate(), email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 XCTAssert(players.count == 1)
                                 expectation.fulfill()
