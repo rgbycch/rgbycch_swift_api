@@ -83,7 +83,7 @@ extension RGBYCCHAPI {
     public var parameters: [String: AnyObject]? {
         switch self {
         case .CreateSession(let email, let password):
-            return ["session": ["email": email, "password": password]]
+            return ["session": [CommonParserConstants.email.rawValue: email, "password": password]]
         case .GetPlayersByIds(let ids) :
             let stringifiedIds = ids.map({
                 (number) -> String in
@@ -142,24 +142,24 @@ extension RGBYCCHAPI {
     private func digestOptionalParameters(let firstName:String?, let lastName:String?, let nickName:String?, let dob:NSDate?, let email:String?, let phoneNumber:String?) -> [String : String] {
         var params = [String : String]()
         if let unwrappedFirstName = firstName {
-            params["first_name"] = unwrappedFirstName
+            params[PlayerParserConstants.firstName.rawValue] = unwrappedFirstName
         }
         if let unwrappedLastName = lastName {
-            params["lastName_name"] = unwrappedLastName
+            params[PlayerParserConstants.lastName.rawValue] = unwrappedLastName
         }
         if let unwrappedNickName = nickName {
-            params["nick_name"] = unwrappedNickName
+            params[PlayerParserConstants.nickName.rawValue] = unwrappedNickName
         }
         if let unwrappedDateOfBirth = dob {
             let formatter = NSDateFormatter()
             formatter.dateFormat = "YYYY-mm-dd'T'HH:mm:ss'.000Z'"
-            params["dob"] = formatter.stringFromDate(unwrappedDateOfBirth)
+            params[PlayerParserConstants.dob.rawValue] = formatter.stringFromDate(unwrappedDateOfBirth)
         }
         if let unwrappedEmail = email {
-            params["email"] = unwrappedEmail
+            params[CommonParserConstants.email.rawValue] = unwrappedEmail
         }
         if let unwrappedPhoneNumber = phoneNumber {
-            params["phone_number"] = unwrappedPhoneNumber
+            params[PlayerParserConstants.phone_number.rawValue] = unwrappedPhoneNumber
         }
         return params
     }
