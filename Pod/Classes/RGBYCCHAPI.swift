@@ -24,11 +24,15 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-enum RGBYCCHAPIServerBaseEndpoints : String {
+private enum RGBYCCHAPIServerBaseEndpoints : String {
     case local = "http://api.rgbycch-rest.devv"
     case remote = "http://api.rgbycch-rest.dev"
 }
 
+/**
+Main entry point into the `RGBYCCHAPI` API. Requests returned from this enum should be passed off to
+RGBYCCHAPIExecutor to be put on the network.
+*/
 public enum RGBYCCHAPI {
     // sessions
     case CreateSession(email: String, password: String)

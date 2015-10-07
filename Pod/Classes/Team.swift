@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// Represents a Team
 public class Team {
     
 }

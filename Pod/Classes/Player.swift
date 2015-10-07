@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// Represents a Player
 public class Player {
     public var identifier:Int32 = 0
     public var firstName:String = ""

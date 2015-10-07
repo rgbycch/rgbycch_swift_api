@@ -22,6 +22,7 @@
 
 import Foundation
 
+/// Represents a User
 public class User {
     public var identifier:Int32 = 0
     public var email:String = ""
