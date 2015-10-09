@@ -24,11 +24,6 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-private enum RGBYCCHAPIServerBaseEndpoints : String {
-    case local = "http://api.rgbycch-rest.devv"
-    case remote = "http://api.rgbycch-rest.dev"
-}
-
 /**
 Main entry point into the `RGBYCCHAPI` API. Requests returned from this enum should be passed off to
 RGBYCCHAPIExecutor to be put on the network.
@@ -87,15 +82,15 @@ extension RGBYCCHAPI {
     public var parameters: [String: AnyObject]? {
         switch self {
         case .CreateSession(let email, let password):
-            return ["session": [CommonParserConstants.email.rawValue: email, "password": password]]
+            return [ParameterConstants.session.rawValue: [CommonParserConstants.email.rawValue: email, ParameterConstants.password.rawValue: password]]
         case .GetPlayersByIds(let ids) :
             let stringifiedIds = ids.map({
                 (number) -> String in
                 return String(number)
             })
-            return ["player_ids": stringifiedIds.joinWithSeparator(",")]
+            return [ParameterConstants.player_ids.rawValue: stringifiedIds.joinWithSeparator(",")]
         case .SearchPlayersByKeyword(let keyword) :
-            return ["keyword": keyword]
+            return [ParameterConstants.keyword.rawValue: keyword]
         case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
             return digestOptionalParameters(firstName, lastName:lastName, nickName:nickName, dob: dob, email: email, phoneNumber: phoneNumber)
         case .UpdatePlayer(_, let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
@@ -116,12 +111,12 @@ extension RGBYCCHAPI {
         let apiVersionHeader = "application/vnd.rgbycch.v" + RGBYCCHAPIConfiguration.sharedState.apiVersion
         switch self {
             case .CreateSession(_, _):
-            return ["Accept" : apiVersionHeader]
+            return [HeaderConstants.accept.rawValue : apiVersionHeader]
         default:
             if let currentUser = RGBYCCHAPICurrentUser.sharedInstance.user {
-                return ["Accept" : apiVersionHeader, "Authorization" : currentUser.authToken]
+                return [HeaderConstants.accept.rawValue : apiVersionHeader, HeaderConstants.authorization.rawValue : currentUser.authToken]
             } else {
-                return ["Accept" : apiVersionHeader]
+                return [HeaderConstants.accept.rawValue : apiVersionHeader]
             }
         }
     }
@@ -204,4 +199,21 @@ public class RGBYCCHAPICurrentUser {
         }
         return Static.instance
     }
+}
+
+private enum RGBYCCHAPIServerBaseEndpoints : String {
+    case local = "http://api.rgbycch-rest.devv"
+    case remote = "http://api.rgbycch-rest.dev"
+}
+
+private enum ParameterConstants : String {
+    case session = "session"
+    case keyword = "keyword"
+    case player_ids = "player_ids"
+    case password = "password"
+}
+
+private enum HeaderConstants : String {
+    case accept = "Accept"
+    case authorization = "Authorization"
 }
