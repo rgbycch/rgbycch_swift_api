@@ -40,32 +40,6 @@ public enum RGBYCCHAPI {
     case DeletePlayer(id: Int32)
 }
 
-protocol Path {
-    var base : String { get }
-    var path : String { get }
-}
-
-extension RGBYCCHAPI : Path {
-    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? RGBYCCHAPIServerBaseEndpoints.local.rawValue : RGBYCCHAPIServerBaseEndpoints.remote.rawValue }
-    var path: String {
-        switch self {
-        case .CreateSession(_, _):
-            return "/sessions.json"
-        case .GetPlayerById(let id):
-            return "/players/\(id).json"
-        case .UpdatePlayer(let id, _, _, _, _, _, _):
-            return "/players/\(id).json"
-        case .GetPlayersByIds(_),
-        .SearchPlayersByKeyword(_):
-            return "/players"
-        case .DeletePlayer(let id):
-            return "/players/\(id).json"
-        case .CreatePlayer(_, _, _, _, _, _):
-            return "/players.json"
-        }
-    }
-}
-
 extension RGBYCCHAPI {
     public var method: Alamofire.Method {
         switch self {
@@ -151,7 +125,7 @@ extension RGBYCCHAPI {
         }
         if let unwrappedDateOfBirth = dob {
             let formatter = NSDateFormatter()
-            formatter.dateFormat = "YYYY-mm-dd'T'HH:mm:ss'.000Z'"
+            formatter.dateFormat = RGBYCCHAPIDateFormat.dateFormat.rawValue
             params[PlayerParserConstants.dob.rawValue] = formatter.stringFromDate(unwrappedDateOfBirth)
         }
         if let unwrappedEmail = email {
@@ -198,6 +172,36 @@ public class RGBYCCHAPICurrentUser {
             static let instance = RGBYCCHAPICurrentUser()
         }
         return Static.instance
+    }
+}
+
+public enum RGBYCCHAPIDateFormat : String {
+    case dateFormat = "YYYY-mm-dd'T'HH:mm:ss'.000Z'"
+}
+
+protocol Path {
+    var base : String { get }
+    var path : String { get }
+}
+
+extension RGBYCCHAPI : Path {
+    public var base: String { return RGBYCCHAPIConfiguration.sharedState.useLocalServer ? RGBYCCHAPIServerBaseEndpoints.local.rawValue : RGBYCCHAPIServerBaseEndpoints.remote.rawValue }
+    var path: String {
+        switch self {
+        case .CreateSession(_, _):
+            return "/sessions.json"
+        case .GetPlayerById(let id):
+            return "/players/\(id).json"
+        case .UpdatePlayer(let id, _, _, _, _, _, _):
+            return "/players/\(id).json"
+        case .GetPlayersByIds(_),
+        .SearchPlayersByKeyword(_):
+            return "/players"
+        case .DeletePlayer(let id):
+            return "/players/\(id).json"
+        case .CreatePlayer(_, _, _, _, _, _):
+            return "/players.json"
+        }
     }
 }
 

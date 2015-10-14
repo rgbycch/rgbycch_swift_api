@@ -75,7 +75,7 @@ public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     public func parsePlayer (json:JSON) -> Player {
         let player = Player()
         let formatter = NSDateFormatter()
-        formatter.dateFormat = "YYYY-mm-dd'T'HH:mm:ss'.000Z'"
+        formatter.dateFormat = RGBYCCHAPIDateFormat.dateFormat.rawValue
         player.identifier = json[CommonParserConstants.identifier.rawValue].int32Value
         player.firstName = json[PlayerParserConstants.firstName.rawValue].stringValue
         player.lastName = json[PlayerParserConstants.lastName.rawValue].stringValue
