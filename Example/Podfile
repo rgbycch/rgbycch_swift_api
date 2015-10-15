@@ -1,9 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-
 target 'rgbycch_swift_api_Tests', :exclusive => true do
   pod "rgbycch_swift_api", :path => "../"
-  pod 'Quick', '~> 0.3.1'
-  pod 'Nimble' 
+  pod 'Quick', '~> 0.6.0'
+  pod 'Nimble', '~> 2.0.0-rc.3'
+  pod 'OHHTTPStubs', '~> 4.3.0'
 end

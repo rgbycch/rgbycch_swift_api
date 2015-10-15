@@ -20,3 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
+/// Represents a User
+public class User {
+    public var identifier:Int32 = 0
+    public var email:String = ""
+    public var authToken:String = ""
+}
