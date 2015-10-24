@@ -1,6 +1,6 @@
 PODS:
-  - Alamofire (3.0.0-beta.3)
-  - Nimble (2.0.0-rc.3)
+  - Alamofire (3.0.1)
+  - Nimble (2.0.0)
   - OHHTTPStubs (4.3.0):
     - OHHTTPStubs/Default (= 4.3.0)
   - OHHTTPStubs/Core (4.3.0)
@@ -14,7 +14,7 @@ PODS:
   - OHHTTPStubs/NSURLSession (4.3.0):
     - OHHTTPStubs/Core
   - OHHTTPStubs/OHPathHelpers (4.3.0)
-  - Quick (0.6.0)
+  - Quick (0.7.0)
   - rgbycch_swift_api (0.1.0):
     - rgbycch_swift_api/Deps (= 0.1.0)
   - rgbycch_swift_api/Deps (0.1.0):
@@ -23,9 +23,9 @@ PODS:
   - SwiftyJSON (2.3.0)
 
 DEPENDENCIES:
-  - Nimble (~> 2.0.0-rc.3)
+  - Nimble (~> 2.0.0)
   - OHHTTPStubs (~> 4.3.0)
-  - Quick (~> 0.6.0)
+  - Quick (~> 0.7.0)
   - rgbycch_swift_api (from `../`)
 
 EXTERNAL SOURCES:
@@ -33,11 +33,11 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: c89149e58431f6f94527e8c01f920456afe39bd0
-  Nimble: 9dff98ee195ffe7351d3b2fb01d3a1420fd97948
+  Alamofire: 2457e1b2e6c46bb05c3a598c542b7bfd08893775
+  Nimble: 472e75466819eb8c06299233e87c694a9b51328a
   OHHTTPStubs: 0aec5755528693a165bd616cb79f69387de306a8
-  Quick: 563686dbcf0ae0f9f7401ac9cd2d786ee1b7f3d7
+  Quick: 906d8aa995ee0afa96f1f7f01170f40fccfa5898
   rgbycch_swift_api: d8a9eef269e1044c5f0bc42e4ab5bb8e6b975b0d
   SwiftyJSON: 8d6b61a70277ef2a5d710d372e06e7e2d87fb9e4
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0
