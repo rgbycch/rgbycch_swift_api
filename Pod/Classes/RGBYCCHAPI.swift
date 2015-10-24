@@ -32,6 +32,9 @@ public enum RGBYCCHAPI {
     // sessions
     case CreateSession(email: String, password: String)
     // teams
+    case GetTeamById(id: Int32)
+    case GetTeamsByIds(ids: [Int32])
+    case SearchTeamsByKeyword(keyword: String)
     case CreateTeam(title: String, clubId: Int32?)
     // players
     case GetPlayerById(id: Int32)
@@ -59,7 +62,15 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(let email, let password):
             return [ParameterConstants.session.rawValue: [CommonParserConstants.email.rawValue: email, ParameterConstants.password.rawValue: password]]
-        case .GetPlayersByIds(let ids) :
+        case .GetTeamsByIds(let ids):
+            let stringifiedIds = ids.map({
+                (number) -> String in
+                return String(number)
+            })
+            return [ParameterConstants.team_ids.rawValue: stringifiedIds.joinWithSeparator(",")]
+        case .SearchTeamsByKeyword(let keyword):
+            return [ParameterConstants.keyword.rawValue: keyword]
+        case .GetPlayersByIds(let ids):
             let stringifiedIds = ids.map({
                 (number) -> String in
                 return String(number)
@@ -77,6 +88,7 @@ extension RGBYCCHAPI {
     public var encoding: ParameterEncoding {
         switch self {
         case .CreateSession(_, _),
+        .CreateTeam(_, _),
         .CreatePlayer(_, _, _, _, _, _),
         .UpdatePlayer(_, _, _, _, _, _, _):
             return .JSON
@@ -103,8 +115,12 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
-        case .CreateTeam(_, _):
+        case .GetTeamById(_),
+        .CreateTeam(_, _):
             return RGBYCCHAPITeamParser()
+        case .GetTeamsByIds(_),
+        .SearchTeamsByKeyword(_):
+            return RGBYCCHAPITeamsParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
         .DeletePlayer(_):
@@ -196,6 +212,11 @@ extension RGBYCCHAPI : Path {
             return "/sessions.json"
         case .CreateTeam(_, _):
             return "/teams.json"
+        case .GetTeamById(let id):
+            return "/teams/\(id).json"
+        case .GetTeamsByIds(_),
+        .SearchTeamsByKeyword(_):
+            return "/teams"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
         case .UpdatePlayer(let id, _, _, _, _, _, _):
@@ -219,6 +240,7 @@ private enum RGBYCCHAPIServerBaseEndpoints : String {
 private enum ParameterConstants : String {
     case session = "session"
     case keyword = "keyword"
+    case team_ids = "team_ids"
     case player_ids = "player_ids"
     case password = "password"
 }

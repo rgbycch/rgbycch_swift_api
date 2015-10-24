@@ -35,6 +35,9 @@ class RGBYCCHAPITest: QuickSpec {
             beforeEach({ () -> () in
                 let map = [
                     "http://api.rgbycch-rest.dev/sessions.json" : "create_session.json",
+                    "http://api.rgbycch-rest.dev/teams/123.json" : "get_team_by_id.json",
+                    "http://api.rgbycch-rest.dev/teams?team_ids=123%2C456" : "get_teams_by_ids.json",
+                    "http://api.rgbycch-rest.dev/teams?keyword=und" : "search_teams.json",
                     "http://api.rgbycch-rest.dev/teams.json" : "create_team.json",
                     "http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
                     "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
@@ -105,6 +108,30 @@ class RGBYCCHAPITest: QuickSpec {
             
             context("Testing Teams API calls") {
                 
+                it("should be able to construct the url correctly for a GetPlayerById call") {
+                    
+                    let teamRequest = RGBYCCHAPI.GetTeamById(id: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/123.json"))
+                }
+                
+                it("should be able to construct the url correctly for a GetPlayersByIds call") {
+                    
+                    let teamRequest = RGBYCCHAPI.GetTeamsByIds(ids: [123, 456]).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams?team_ids=123%2C456"))
+                }
+                
+                it("should be able to construct the url correctly for a SearchPlayersByKeyword call") {
+                    
+                    let teamRequest = RGBYCCHAPI.SearchTeamsByKeyword(keyword: "und").request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams?keyword=und"))
+                }
+                
                 it("should be able to construct the url correctly for creating a team call") {
                     
                     let teamRequest = RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123).request
@@ -134,6 +161,9 @@ class RGBYCCHAPITest: QuickSpec {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123), completionBlock: { (results) -> Void in
                             if let teams = results as? [Team] {
                                 XCTAssert(teams.count == 1)
+                                let team = teams[0]
+                                expect(team.identifier).to(equal(1))
+                                expect(team.title).to(equal("International U21 Team"))
                                 expectation.fulfill()
                             } else {
                                 XCTFail("api call failed")

@@ -33,6 +33,8 @@ enum CommonParserConstants : String {
     case user = "user"
     case email = "email"
     case team = "team"
+    case teams = "teams"
+    case title = "title"
 }
 
 enum UserParserConstants : String {
@@ -69,10 +71,29 @@ public class RGBYCCHAPIUserParser : RGBYCCHAPIParser {
 public class RGBYCCHAPITeamParser : RGBYCCHAPIParser {
 
     public func parse(json:JSON) throws -> ([AnyObject]?) {
+        return ([self.parseTeam(json)])
+    }
+    
+    public func parseTeam(json:JSON) -> Team {
         let team = Team()
-        let teamDictionary = json[CommonParserConstants.team.rawValue].dictionaryValue
-        team.identifier = (teamDictionary[CommonParserConstants.identifier.rawValue]?.int32Value)!
-        return ([team])
+        let teamDictionary = json[CommonParserConstants.team.rawValue]
+        team.identifier = teamDictionary[CommonParserConstants.identifier.rawValue].int32Value
+        team.title = teamDictionary[CommonParserConstants.title.rawValue].stringValue
+        return team
+    }
+}
+
+public class RGBYCCHAPITeamsParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let teamParser = RGBYCCHAPITeamParser()
+        let teams = json[CommonParserConstants.teams.rawValue].arrayValue
+        var parsedTeams:Array<AnyObject> = []
+        for entry in teams {
+            let team = teamParser.parseTeam(entry)
+            parsedTeams.append(team)
+        }
+        return (parsedTeams)
     }
 }
 
