@@ -22,10 +22,8 @@
 
 import Foundation
 
-/// Represents a Team
-public class Team {
+/// Represents a Club
+public class Club {
     public var identifier:Int32 = 0
     public var title:String = ""
-    public var club:Club?
-    public var players:[Player] = []
 }

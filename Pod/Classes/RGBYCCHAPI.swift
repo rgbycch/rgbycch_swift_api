@@ -31,6 +31,8 @@ RGBYCCHAPIExecutor to be put on the network.
 public enum RGBYCCHAPI {
     // sessions
     case CreateSession(email: String, password: String)
+    // teams
+    case CreateTeam(title: String, clubId: Int32?)
     // players
     case GetPlayerById(id: Int32)
     case GetPlayersByIds(ids: [Int32])
@@ -101,6 +103,8 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
+        case .CreateTeam(_, _):
+            return RGBYCCHAPITeamParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
         .DeletePlayer(_):
@@ -190,6 +194,8 @@ extension RGBYCCHAPI : Path {
         switch self {
         case .CreateSession(_, _):
             return "/sessions.json"
+        case .CreateTeam(_, _):
+            return "/teams.json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
         case .UpdatePlayer(let id, _, _, _, _, _, _):

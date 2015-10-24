@@ -35,6 +35,7 @@ class RGBYCCHAPITest: QuickSpec {
             beforeEach({ () -> () in
                 let map = [
                     "http://api.rgbycch-rest.dev/sessions.json" : "create_session.json",
+                    "http://api.rgbycch-rest.dev/teams.json" : "create_team.json",
                     "http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
                     "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
                     "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json",
@@ -100,6 +101,50 @@ class RGBYCCHAPITest: QuickSpec {
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
 
+            }
+            
+            context("Testing Teams API calls") {
+                
+                it("should be able to construct the url correctly for creating a team call") {
+                    
+                    let teamRequest = RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams.json"))
+                }
+                
+                it("should be able to execute a request to create a new team") {
+                    
+                    let expectation = self.expectationWithDescription("CreateTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one team when creating a new team") {
+                    
+                    let expectation = self.expectationWithDescription("CreateTeamCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123), completionBlock: { (results) -> Void in
+                            if let teams = results as? [Team] {
+                                XCTAssert(teams.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
             }
             
             context("Testing Player API calls") {

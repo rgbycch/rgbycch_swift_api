@@ -32,6 +32,7 @@ enum CommonParserConstants : String {
     case identifier = "id"
     case user = "user"
     case email = "email"
+    case team = "team"
 }
 
 enum UserParserConstants : String {
@@ -44,7 +45,6 @@ enum PlayerParserConstants : String {
     case nickName = "nick_name"
     case dob = "dob"
     case phone_number = "phone_number"
-    case teams = "teams"
     case players = "players"
     case player = "player"
 }
@@ -63,6 +63,16 @@ public class RGBYCCHAPIUserParser : RGBYCCHAPIParser {
         user.authToken = json[CommonParserConstants.user.rawValue][UserParserConstants.authToken.rawValue].stringValue
         RGBYCCHAPICurrentUser.sharedInstance.user = user;
         return ([user])
+    }
+}
+
+public class RGBYCCHAPITeamParser : RGBYCCHAPIParser {
+
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let team = Team()
+        let teamDictionary = json[CommonParserConstants.team.rawValue].dictionaryValue
+        team.identifier = (teamDictionary[CommonParserConstants.identifier.rawValue]?.int32Value)!
+        return ([team])
     }
 }
 
