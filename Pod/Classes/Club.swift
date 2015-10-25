@@ -26,4 +26,6 @@ import Foundation
 public class Club {
     public var identifier:Int32 = 0
     public var title:String = ""
+    public var url:String = ""
+    public var founded:NSDate = NSDate()
 }

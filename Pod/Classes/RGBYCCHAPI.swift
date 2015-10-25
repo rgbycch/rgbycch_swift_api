@@ -63,19 +63,11 @@ extension RGBYCCHAPI {
         case .CreateSession(let email, let password):
             return [ParameterConstants.session.rawValue: [CommonParserConstants.email.rawValue: email, ParameterConstants.password.rawValue: password]]
         case .GetTeamsByIds(let ids):
-            let stringifiedIds = ids.map({
-                (number) -> String in
-                return String(number)
-            })
-            return [ParameterConstants.team_ids.rawValue: stringifiedIds.joinWithSeparator(",")]
+            return [ParameterConstants.team_ids.rawValue: ids.stringified()]
         case .SearchTeamsByKeyword(let keyword):
             return [ParameterConstants.keyword.rawValue: keyword]
         case .GetPlayersByIds(let ids):
-            let stringifiedIds = ids.map({
-                (number) -> String in
-                return String(number)
-            })
-            return [ParameterConstants.player_ids.rawValue: stringifiedIds.joinWithSeparator(",")]
+            return [ParameterConstants.player_ids.rawValue: ids.stringified()]
         case .SearchPlayersByKeyword(let keyword) :
             return [ParameterConstants.keyword.rawValue: keyword]
         case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
@@ -248,4 +240,14 @@ private enum ParameterConstants : String {
 private enum HeaderConstants : String {
     case accept = "Accept"
     case authorization = "Authorization"
+}
+
+private extension Array {
+    func stringified() -> String {
+        let stringifiedIds = self.map({
+            (number) -> String in
+            return String(number)
+        })
+        return stringifiedIds.joinWithSeparator(",")
+    }
 }

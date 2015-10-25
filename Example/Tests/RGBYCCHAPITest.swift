@@ -108,7 +108,7 @@ class RGBYCCHAPITest: QuickSpec {
             
             context("Testing Teams API calls") {
                 
-                it("should be able to construct the url correctly for a GetPlayerById call") {
+                it("should be able to construct the url correctly for a GetTeamById call") {
                     
                     let teamRequest = RGBYCCHAPI.GetTeamById(id: 123).request
                     let teamRequestURLString = teamRequest.request?.URL?.absoluteString
@@ -116,7 +116,7 @@ class RGBYCCHAPITest: QuickSpec {
                     expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/123.json"))
                 }
                 
-                it("should be able to construct the url correctly for a GetPlayersByIds call") {
+                it("should be able to construct the url correctly for a GetTeamsByIds call") {
                     
                     let teamRequest = RGBYCCHAPI.GetTeamsByIds(ids: [123, 456]).request
                     let teamRequestURLString = teamRequest.request?.URL?.absoluteString
@@ -124,7 +124,7 @@ class RGBYCCHAPITest: QuickSpec {
                     expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams?team_ids=123%2C456"))
                 }
                 
-                it("should be able to construct the url correctly for a SearchPlayersByKeyword call") {
+                it("should be able to construct the url correctly for a SearchTeamsByKeyword call") {
                     
                     let teamRequest = RGBYCCHAPI.SearchTeamsByKeyword(keyword: "und").request
                     let teamRequestURLString = teamRequest.request?.URL?.absoluteString
@@ -138,6 +138,49 @@ class RGBYCCHAPITest: QuickSpec {
                     let teamRequestURLString = teamRequest.request?.URL?.absoluteString
                     
                     expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams.json"))
+                }
+                
+                it("should be able to execute a request to get a team") {
+                    
+                    let expectation = self.expectationWithDescription("GetTeamByIdCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetTeamById(id: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to get a list of teams by id") {
+                    
+                    let expectation = self.expectationWithDescription("GetTeamsByIdsCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetTeamsByIds(ids: [123, 456]), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to search for a list of teams by keyword") {
+                    
+                    let expectation = self.expectationWithDescription("SearchTeamsByKeywordCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchTeamsByKeyword(keyword: "und"), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
                 
                 it("should be able to execute a request to create a new team") {
@@ -368,7 +411,7 @@ class RGBYCCHAPITest: QuickSpec {
                 
                 it("should return one player when searching by keyword") {
                     
-                    let expectation = self.expectationWithDescription("SearchPlayersByIdsCompletion")
+                    let expectation = self.expectationWithDescription("SearchPlayersByKeywordCompletion")
                     
                     do {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results) -> Void in
