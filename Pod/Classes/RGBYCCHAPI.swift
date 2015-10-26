@@ -37,6 +37,7 @@ public enum RGBYCCHAPI {
     case SearchTeamsByKeyword(keyword: String)
     case CreateTeam(title: String, clubId: Int32?)
     case UpdateTeam(id: Int32, title: String?, clubId:Int32?)
+    case DeleteTeam(id: Int32)
     // players
     case GetPlayerById(id: Int32)
     case GetPlayersByIds(ids: [Int32])
@@ -55,7 +56,8 @@ extension RGBYCCHAPI {
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _):
             return Alamofire.Method.PATCH
-        case .DeletePlayer(_):
+        case .DeletePlayer(_),
+        .DeleteTeam(_):
             return Alamofire.Method.DELETE
         default : return Alamofire.Method.GET
         }
@@ -90,6 +92,7 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(_, _),
         .CreateTeam(_, _),
+        .UpdateTeam(_, _, _),
         .CreatePlayer(_, _, _, _, _, _),
         .UpdatePlayer(_, _, _, _, _, _, _):
             return .JSON
@@ -117,7 +120,8 @@ extension RGBYCCHAPI {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
         case .GetTeamById(_),
-        .CreateTeam(_, _):
+        .CreateTeam(_, _),
+        .DeleteTeam(_):
             return RGBYCCHAPITeamParser()
         case .GetTeamsByIds(_),
         .SearchTeamsByKeyword(_):
@@ -221,6 +225,8 @@ extension RGBYCCHAPI : Path {
         .SearchTeamsByKeyword(_):
             return "/teams"
         case .UpdateTeam(let id, _, _):
+            return "/teams/\(id).json"
+        case .DeleteTeam(let id):
             return "/teams/\(id).json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"

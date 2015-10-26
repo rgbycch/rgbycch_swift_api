@@ -40,6 +40,7 @@ class RGBYCCHAPITest: QuickSpec {
                     "http://api.rgbycch-rest.dev/teams?keyword=und" : "search_teams.json",
                     "http://api.rgbycch-rest.dev/teams.json" : "create_team.json",
                     "http://api.rgbycch-rest.dev/teams/456.json" : "update_team.json",
+                    "http://api.rgbycch-rest.dev/teams/789.json" : "delete_team.json",
                     "http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
                     "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
                     "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json",
@@ -147,6 +148,14 @@ class RGBYCCHAPITest: QuickSpec {
                     let teamRequestURLString = teamRequest.request?.URL?.absoluteString
                     
                     expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/456.json"))
+                }
+                
+                it("should be able to construct the url correctly for a DeleteTeam call") {
+                    
+                    let teamRequest = RGBYCCHAPI.DeleteTeam(id: 789).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/789.json"))
                 }
                 
                 it("should be able to execute a request to get a team") {
@@ -258,6 +267,19 @@ class RGBYCCHAPITest: QuickSpec {
                         XCTFail("api call failed with error: \(error)")
                     }
                     
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to delete an existing team") {
+                    
+                    let expectation = self.expectationWithDescription("DeleteTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.DeleteTeam(id: 789), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
             }

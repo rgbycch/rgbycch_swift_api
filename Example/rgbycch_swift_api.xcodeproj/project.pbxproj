@@ -21,6 +21,7 @@
 		418D001D1BB9F1DE00E245FD /* RGBYCCHAPIConfigurationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418D001B1BB9F1DE00E245FD /* RGBYCCHAPIConfigurationTest.swift */; };
 		418D001E1BB9F1DE00E245FD /* RGBYCCHAPITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418D001C1BB9F1DE00E245FD /* RGBYCCHAPITest.swift */; };
 		418D00201BBA64FB00E245FD /* get_player_by_id.json in Resources */ = {isa = PBXBuildFile; fileRef = 418D001F1BBA64FB00E245FD /* get_player_by_id.json */; };
+		41C5085C1BDEB1A000D82AEB /* delete_team.json in Resources */ = {isa = PBXBuildFile; fileRef = 41C5085B1BDEB1A000D82AEB /* delete_team.json */; settings = {ASSET_TAGS = (); }; };
 		D79ED8A14C0948FA3F196272 /* Pods_rgbycch_swift_api_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDDA0CD935EF58D9F95DE613 /* Pods_rgbycch_swift_api_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		418D001B1BB9F1DE00E245FD /* RGBYCCHAPIConfigurationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPIConfigurationTest.swift; sourceTree = "<group>"; };
 		418D001C1BB9F1DE00E245FD /* RGBYCCHAPITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBYCCHAPITest.swift; sourceTree = "<group>"; };
 		418D001F1BBA64FB00E245FD /* get_player_by_id.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = get_player_by_id.json; sourceTree = "<group>"; };
+		41C5085B1BDEB1A000D82AEB /* delete_team.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delete_team.json; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* rgbycch_swift_api_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rgbycch_swift_api_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CDDA0CD935EF58D9F95DE613 /* Pods_rgbycch_swift_api_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_rgbycch_swift_api_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,13 +107,14 @@
 				416A5F511BBD260100493077 /* create_session.json */,
 				4129EC371BDBAE1600899310 /* create_team.json */,
 				412060071BC0920100668CAE /* delete_player.json */,
+				41C5085B1BDEB1A000D82AEB /* delete_team.json */,
 				418D001F1BBA64FB00E245FD /* get_player_by_id.json */,
 				410D44651BBAABB20045898B /* get_players_by_ids.json */,
 				4129EC3D1BDBE97800899310 /* get_team_by_id.json */,
 				4129EC3F1BDBE98900899310 /* get_teams_by_ids.json */,
 				607FACEA1AFB9204008FA782 /* Info.plist */,
-				4129EC3B1BDBE94D00899310 /* search_teams.json */,
 				410D44631BBA9E870045898B /* search_players.json */,
+				4129EC3B1BDBE94D00899310 /* search_teams.json */,
 				412060051BC0884500668CAE /* update_player.json */,
 				4129EC411BDE7A4300899310 /* update_team.json */,
 			);
@@ -211,6 +214,7 @@
 				418D00201BBA64FB00E245FD /* get_player_by_id.json in Resources */,
 				4129EC3C1BDBE94D00899310 /* search_teams.json in Resources */,
 				4129EC401BDBE98900899310 /* get_teams_by_ids.json in Resources */,
+				41C5085C1BDEB1A000D82AEB /* delete_team.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
