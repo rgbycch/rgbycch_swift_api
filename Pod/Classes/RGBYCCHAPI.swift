@@ -36,6 +36,7 @@ public enum RGBYCCHAPI {
     case GetTeamsByIds(ids: [Int32])
     case SearchTeamsByKeyword(keyword: String)
     case CreateTeam(title: String, clubId: Int32?)
+    case UpdateTeam(id: Int32, title: String?, clubId:Int32?)
     // players
     case GetPlayerById(id: Int32)
     case GetPlayersByIds(ids: [Int32])
@@ -49,7 +50,8 @@ extension RGBYCCHAPI {
     public var method: Alamofire.Method {
         switch self {
         case .CreateSession(_, _),
-        .CreatePlayer(_, _, _, _, _, _):
+        .CreatePlayer(_, _, _, _, _, _),
+        .CreateTeam(_, _):
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _):
             return Alamofire.Method.PATCH
@@ -66,6 +68,13 @@ extension RGBYCCHAPI {
             return [ParameterConstants.team_ids.rawValue: ids.stringified()]
         case .SearchTeamsByKeyword(let keyword):
             return [ParameterConstants.keyword.rawValue: keyword]
+        case .CreateTeam(let title, let clubId):
+            var params = [String : String]()
+            params[ParameterConstants.title.rawValue] = title
+            if let unwrappedClubId = clubId {
+                params[ParameterConstants.club_id.rawValue] = String(unwrappedClubId)
+            }
+            return params
         case .GetPlayersByIds(let ids):
             return [ParameterConstants.player_ids.rawValue: ids.stringified()]
         case .SearchPlayersByKeyword(let keyword) :
@@ -113,6 +122,8 @@ extension RGBYCCHAPI {
         case .GetTeamsByIds(_),
         .SearchTeamsByKeyword(_):
             return RGBYCCHAPITeamsParser()
+        case .UpdateTeam(_, _, _):
+            return RGBYCCHAPIUpdateTeamParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
         .DeletePlayer(_):
@@ -209,6 +220,8 @@ extension RGBYCCHAPI : Path {
         case .GetTeamsByIds(_),
         .SearchTeamsByKeyword(_):
             return "/teams"
+        case .UpdateTeam(let id, _, _):
+            return "/teams/\(id).json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
         case .UpdatePlayer(let id, _, _, _, _, _, _):
@@ -235,6 +248,8 @@ private enum ParameterConstants : String {
     case team_ids = "team_ids"
     case player_ids = "player_ids"
     case password = "password"
+    case title = "title"
+    case club_id = "club_id"
 }
 
 private enum HeaderConstants : String {

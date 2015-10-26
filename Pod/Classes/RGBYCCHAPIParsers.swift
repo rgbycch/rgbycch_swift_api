@@ -97,6 +97,15 @@ public class RGBYCCHAPITeamsParser : RGBYCCHAPIParser {
     }
 }
 
+public class RGBYCCHAPIUpdateTeamParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let teamParser = RGBYCCHAPITeamParser()
+        let team = teamParser.parseTeam(json[CommonParserConstants.team.rawValue])
+        return ([team])
+    }
+}
+
 public class RGBYCCHAPIPlayerParser : RGBYCCHAPIParser {
     
     public func parse(json:JSON) throws -> ([AnyObject]?) {
