@@ -39,6 +39,7 @@ public enum RGBYCCHAPI {
     case UpdateTeam(id: Int32, title: String?, clubId:Int32?)
     case DeleteTeam(id: Int32)
     case AddPlayerToTeam(teamId: Int32, playerId: Int32)
+    case RemovePlayerFromTeam(teamId: Int32, playerId: Int32)
     // players
     case GetPlayerById(id: Int32)
     case GetPlayersByIds(ids: [Int32])
@@ -57,7 +58,8 @@ extension RGBYCCHAPI {
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _),
         .UpdateTeam(_, _, _),
-        .AddPlayerToTeam(_, _):
+        .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
             return Alamofire.Method.PATCH
         case .DeletePlayer(_),
         .DeleteTeam(_):
@@ -81,10 +83,9 @@ extension RGBYCCHAPI {
             }
             return params
         case .AddPlayerToTeam(let teamId, let playerId):
-            var params = [String : NSNumber]()
-            params[ParameterConstants.team_ids.rawValue] = NSNumber(int: teamId)
-            params[ParameterConstants.player_id.rawValue] = NSNumber(int: playerId)
-            return params
+            return digestAddRemovePlayerParams(teamId, playerId: playerId)
+        case .RemovePlayerFromTeam(let teamId, let playerId):
+            return digestAddRemovePlayerParams(teamId, playerId: playerId)
         case .GetPlayersByIds(let ids):
             return [ParameterConstants.player_ids.rawValue: ids.stringified()]
         case .SearchPlayersByKeyword(let keyword) :
@@ -102,7 +103,9 @@ extension RGBYCCHAPI {
         .CreateTeam(_, _),
         .UpdateTeam(_, _, _),
         .CreatePlayer(_, _, _, _, _, _),
-        .UpdatePlayer(_, _, _, _, _, _, _):
+        .UpdatePlayer(_, _, _, _, _, _, _),
+        .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
             return .JSON
         default: return .URL
         }
@@ -134,9 +137,9 @@ extension RGBYCCHAPI {
         case .GetTeamsByIds(_),
         .SearchTeamsByKeyword(_):
             return RGBYCCHAPITeamsParser()
-        case .UpdateTeam(_, _, _):
-            return RGBYCCHAPIUpdateTeamParser()
-        case .AddPlayerToTeam(_, _):
+        case .UpdateTeam(_, _, _),
+        .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
             return RGBYCCHAPIUpdateTeamParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
@@ -171,6 +174,12 @@ extension RGBYCCHAPI {
         if let unwrappedPhoneNumber = phoneNumber {
             params[PlayerParserConstants.phone_number.rawValue] = unwrappedPhoneNumber
         }
+        return params
+    }
+    private func digestAddRemovePlayerParams(let teamId:Int32, let playerId:Int32) -> [String: AnyObject] {
+        var params = [String : NSNumber]()
+        params[ParameterConstants.team_ids.rawValue] = NSNumber(int: teamId)
+        params[ParameterConstants.player_id.rawValue] = NSNumber(int: playerId)
         return params
     }
 }
@@ -239,7 +248,9 @@ extension RGBYCCHAPI : Path {
         case .DeleteTeam(let id):
             return "/teams/\(id).json"
         case .AddPlayerToTeam(let teamId, _):
-            return "/teams/\(teamId).json"
+            return "/teams/\(teamId)/add_player.json"
+        case .RemovePlayerFromTeam(let teamId, _):
+            return "/teams/\(teamId)/remove_player.json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
         case .UpdatePlayer(let id, _, _, _, _, _, _):
