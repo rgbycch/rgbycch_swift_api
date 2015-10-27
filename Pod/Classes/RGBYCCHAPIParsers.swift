@@ -32,6 +32,9 @@ enum CommonParserConstants : String {
     case identifier = "id"
     case user = "user"
     case email = "email"
+    case team = "team"
+    case teams = "teams"
+    case title = "title"
 }
 
 enum UserParserConstants : String {
@@ -44,7 +47,6 @@ enum PlayerParserConstants : String {
     case nickName = "nick_name"
     case dob = "dob"
     case phone_number = "phone_number"
-    case teams = "teams"
     case players = "players"
     case player = "player"
 }
@@ -63,6 +65,44 @@ public class RGBYCCHAPIUserParser : RGBYCCHAPIParser {
         user.authToken = json[CommonParserConstants.user.rawValue][UserParserConstants.authToken.rawValue].stringValue
         RGBYCCHAPICurrentUser.sharedInstance.user = user;
         return ([user])
+    }
+}
+
+public class RGBYCCHAPITeamParser : RGBYCCHAPIParser {
+
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        return ([self.parseTeam(json)])
+    }
+    
+    public func parseTeam(json:JSON) -> Team {
+        let team = Team()
+        let teamDictionary = json[CommonParserConstants.team.rawValue]
+        team.identifier = teamDictionary[CommonParserConstants.identifier.rawValue].int32Value
+        team.title = teamDictionary[CommonParserConstants.title.rawValue].stringValue
+        return team
+    }
+}
+
+public class RGBYCCHAPITeamsParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let teamParser = RGBYCCHAPITeamParser()
+        let teams = json[CommonParserConstants.teams.rawValue].arrayValue
+        var parsedTeams:Array<AnyObject> = []
+        for entry in teams {
+            let team = teamParser.parseTeam(entry)
+            parsedTeams.append(team)
+        }
+        return (parsedTeams)
+    }
+}
+
+public class RGBYCCHAPIUpdateTeamParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let teamParser = RGBYCCHAPITeamParser()
+        let team = teamParser.parseTeam(json[CommonParserConstants.team.rawValue])
+        return ([team])
     }
 }
 

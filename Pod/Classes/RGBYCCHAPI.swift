@@ -31,6 +31,15 @@ RGBYCCHAPIExecutor to be put on the network.
 public enum RGBYCCHAPI {
     // sessions
     case CreateSession(email: String, password: String)
+    // teams
+    case GetTeamById(id: Int32)
+    case GetTeamsByIds(ids: [Int32])
+    case SearchTeamsByKeyword(keyword: String)
+    case CreateTeam(title: String, clubId: Int32?)
+    case UpdateTeam(id: Int32, title: String?, clubId:Int32?)
+    case DeleteTeam(id: Int32)
+    case AddPlayerToTeam(teamId: Int32, playerId: Int32)
+    case RemovePlayerFromTeam(teamId: Int32, playerId: Int32)
     // players
     case GetPlayerById(id: Int32)
     case GetPlayersByIds(ids: [Int32])
@@ -44,11 +53,16 @@ extension RGBYCCHAPI {
     public var method: Alamofire.Method {
         switch self {
         case .CreateSession(_, _),
-        .CreatePlayer(_, _, _, _, _, _):
+        .CreatePlayer(_, _, _, _, _, _),
+        .CreateTeam(_, _):
             return Alamofire.Method.POST
-        case .UpdatePlayer(_, _, _, _, _, _, _):
+        case .UpdatePlayer(_, _, _, _, _, _, _),
+        .UpdateTeam(_, _, _),
+        .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
             return Alamofire.Method.PATCH
-        case .DeletePlayer(_):
+        case .DeletePlayer(_),
+        .DeleteTeam(_):
             return Alamofire.Method.DELETE
         default : return Alamofire.Method.GET
         }
@@ -57,12 +71,23 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(let email, let password):
             return [ParameterConstants.session.rawValue: [CommonParserConstants.email.rawValue: email, ParameterConstants.password.rawValue: password]]
-        case .GetPlayersByIds(let ids) :
-            let stringifiedIds = ids.map({
-                (number) -> String in
-                return String(number)
-            })
-            return [ParameterConstants.player_ids.rawValue: stringifiedIds.joinWithSeparator(",")]
+        case .GetTeamsByIds(let ids):
+            return [ParameterConstants.team_ids.rawValue: ids.stringified()]
+        case .SearchTeamsByKeyword(let keyword):
+            return [ParameterConstants.keyword.rawValue: keyword]
+        case .CreateTeam(let title, let clubId):
+            var params = [String : String]()
+            params[ParameterConstants.title.rawValue] = title
+            if let unwrappedClubId = clubId {
+                params[ParameterConstants.club_id.rawValue] = String(unwrappedClubId)
+            }
+            return params
+        case .AddPlayerToTeam(let teamId, let playerId):
+            return digestAddRemovePlayerParams(teamId, playerId: playerId)
+        case .RemovePlayerFromTeam(let teamId, let playerId):
+            return digestAddRemovePlayerParams(teamId, playerId: playerId)
+        case .GetPlayersByIds(let ids):
+            return [ParameterConstants.player_ids.rawValue: ids.stringified()]
         case .SearchPlayersByKeyword(let keyword) :
             return [ParameterConstants.keyword.rawValue: keyword]
         case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
@@ -75,8 +100,12 @@ extension RGBYCCHAPI {
     public var encoding: ParameterEncoding {
         switch self {
         case .CreateSession(_, _),
+        .CreateTeam(_, _),
+        .UpdateTeam(_, _, _),
         .CreatePlayer(_, _, _, _, _, _),
-        .UpdatePlayer(_, _, _, _, _, _, _):
+        .UpdatePlayer(_, _, _, _, _, _, _),
+        .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
             return .JSON
         default: return .URL
         }
@@ -101,6 +130,17 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
+        case .GetTeamById(_),
+        .CreateTeam(_, _),
+        .DeleteTeam(_):
+            return RGBYCCHAPITeamParser()
+        case .GetTeamsByIds(_),
+        .SearchTeamsByKeyword(_):
+            return RGBYCCHAPITeamsParser()
+        case .UpdateTeam(_, _, _),
+        .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
+            return RGBYCCHAPIUpdateTeamParser()
         case .GetPlayerById(_),
         .CreatePlayer(_, _, _, _, _, _),
         .DeletePlayer(_):
@@ -134,6 +174,12 @@ extension RGBYCCHAPI {
         if let unwrappedPhoneNumber = phoneNumber {
             params[PlayerParserConstants.phone_number.rawValue] = unwrappedPhoneNumber
         }
+        return params
+    }
+    private func digestAddRemovePlayerParams(let teamId:Int32, let playerId:Int32) -> [String: AnyObject] {
+        var params = [String : NSNumber]()
+        params[ParameterConstants.team_ids.rawValue] = NSNumber(int: teamId)
+        params[ParameterConstants.player_id.rawValue] = NSNumber(int: playerId)
         return params
     }
 }
@@ -190,6 +236,21 @@ extension RGBYCCHAPI : Path {
         switch self {
         case .CreateSession(_, _):
             return "/sessions.json"
+        case .CreateTeam(_, _):
+            return "/teams.json"
+        case .GetTeamById(let id):
+            return "/teams/\(id).json"
+        case .GetTeamsByIds(_),
+        .SearchTeamsByKeyword(_):
+            return "/teams"
+        case .UpdateTeam(let id, _, _):
+            return "/teams/\(id).json"
+        case .DeleteTeam(let id):
+            return "/teams/\(id).json"
+        case .AddPlayerToTeam(let teamId, _):
+            return "/teams/\(teamId)/add_player.json"
+        case .RemovePlayerFromTeam(let teamId, _):
+            return "/teams/\(teamId)/remove_player.json"
         case .GetPlayerById(let id):
             return "/players/\(id).json"
         case .UpdatePlayer(let id, _, _, _, _, _, _):
@@ -213,11 +274,26 @@ private enum RGBYCCHAPIServerBaseEndpoints : String {
 private enum ParameterConstants : String {
     case session = "session"
     case keyword = "keyword"
+    case team_ids = "team_ids"
     case player_ids = "player_ids"
     case password = "password"
+    case title = "title"
+    case club_id = "club_id"
+    case team_id = "team_id"
+    case player_id = "player_id"
 }
 
 private enum HeaderConstants : String {
     case accept = "Accept"
     case authorization = "Authorization"
+}
+
+private extension Array {
+    func stringified() -> String {
+        let stringifiedIds = self.map({
+            (number) -> String in
+            return String(number)
+        })
+        return stringifiedIds.joinWithSeparator(",")
+    }
 }

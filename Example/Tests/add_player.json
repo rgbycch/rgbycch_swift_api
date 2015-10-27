@@ -1,0 +1,21 @@
+{
+    "team": {
+        "id": 1,
+        "title": "International U21 Team",
+        "players": [
+                    {
+                    "id": 1,
+                    "first_name": "Blanda",
+                    "last_name": "Kutch",
+                    "nick_name": "Gerry",
+                    "dob": "2015-09-17T10:24:05.000Z",
+                    "email": "adonis@brakus.com",
+                    "phone_number": "123456789",
+                    "teams": [
+                    
+                    ]
+                    }
+                    ],
+        "club": null
+    }
+}

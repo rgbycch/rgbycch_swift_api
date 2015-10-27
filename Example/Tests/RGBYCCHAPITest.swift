@@ -35,6 +35,14 @@ class RGBYCCHAPITest: QuickSpec {
             beforeEach({ () -> () in
                 let map = [
                     "http://api.rgbycch-rest.dev/sessions.json" : "create_session.json",
+                    "http://api.rgbycch-rest.dev/teams/123.json" : "get_team_by_id.json",
+                    "http://api.rgbycch-rest.dev/teams?team_ids=123%2C456" : "get_teams_by_ids.json",
+                    "http://api.rgbycch-rest.dev/teams?keyword=und" : "search_teams.json",
+                    "http://api.rgbycch-rest.dev/teams.json" : "create_team.json",
+                    "http://api.rgbycch-rest.dev/teams/456.json" : "update_team.json",
+                    "http://api.rgbycch-rest.dev/teams/789.json" : "delete_team.json",
+                    "http://api.rgbycch-rest.dev/teams/777/add_player.json" : "add_player.json",
+                    "http://api.rgbycch-rest.dev/teams/777/remove_player.json" : "remove_player.json",
                     "http://api.rgbycch-rest.dev/players/123.json" : "get_player_by_id.json",
                     "http://api.rgbycch-rest.dev/players?player_ids=123%2C456" : "get_players_by_ids.json",
                     "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json",
@@ -100,6 +108,224 @@ class RGBYCCHAPITest: QuickSpec {
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
 
+            }
+            
+            context("Testing Teams API calls") {
+                
+                it("should be able to construct the url correctly for a GetTeamById call") {
+                    
+                    let teamRequest = RGBYCCHAPI.GetTeamById(id: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/123.json"))
+                }
+                
+                it("should be able to construct the url correctly for a GetTeamsByIds call") {
+                    
+                    let teamRequest = RGBYCCHAPI.GetTeamsByIds(ids: [123, 456]).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams?team_ids=123%2C456"))
+                }
+                
+                it("should be able to construct the url correctly for a SearchTeamsByKeyword call") {
+                    
+                    let teamRequest = RGBYCCHAPI.SearchTeamsByKeyword(keyword: "und").request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams?keyword=und"))
+                }
+                
+                it("should be able to construct the url correctly for creating a team call") {
+                    
+                    let teamRequest = RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams.json"))
+                }
+                
+                it("should be able to construct the url correctly for a UpdateTeam call") {
+                    
+                    let teamRequest = RGBYCCHAPI.UpdateTeam(id: 456, title: "Updated Team Title", clubId: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/456.json"))
+                }
+                
+                it("should be able to construct the url correctly for a DeleteTeam call") {
+                    
+                    let teamRequest = RGBYCCHAPI.DeleteTeam(id: 789).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/789.json"))
+                }
+                
+                it("should be able to construct the url correctly for adding a player to a team call") {
+                    
+                    let teamRequest = RGBYCCHAPI.AddPlayerToTeam(teamId: 777, playerId: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/777/add_player.json"))
+                }
+                
+                it("should be able to construct the url correctly for removing a player from a team call") {
+                    
+                    let teamRequest = RGBYCCHAPI.RemovePlayerFromTeam(teamId: 777, playerId: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/777/remove_player.json"))
+                }
+                
+                it("should be able to execute a request to get a team") {
+                    
+                    let expectation = self.expectationWithDescription("GetTeamByIdCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetTeamById(id: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to get a list of teams by id") {
+                    
+                    let expectation = self.expectationWithDescription("GetTeamsByIdsCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetTeamsByIds(ids: [123, 456]), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to search for a list of teams by keyword") {
+                    
+                    let expectation = self.expectationWithDescription("SearchTeamsByKeywordCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchTeamsByKeyword(keyword: "und"), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to create a new team") {
+                    
+                    let expectation = self.expectationWithDescription("CreateTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one team when creating a new team") {
+                    
+                    let expectation = self.expectationWithDescription("CreateTeamCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateTeam(title: "Team Title", clubId: 123), completionBlock: { (results) -> Void in
+                            if let teams = results as? [Team] {
+                                XCTAssert(teams.count == 1)
+                                let team = teams[0]
+                                expect(team.identifier).to(equal(1))
+                                expect(team.title).to(equal("International U21 Team"))
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to update an existing team") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdateTeam(id: 456, title: "Updated Title", clubId: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to add a player to an existing team") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateTeamAddPlayerCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.AddPlayerToTeam(teamId: 777, playerId: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to remove a player from an existing team") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateTeamRemovePlayerCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.RemovePlayerFromTeam(teamId: 777, playerId: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one team when updating a team") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateTeamCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdateTeam(id: 456, title: "Updated Title", clubId: 123), completionBlock: { (results) -> Void in
+                            if let teams = results as? [Team] {
+                                XCTAssert(teams.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to delete an existing team") {
+                    
+                    let expectation = self.expectationWithDescription("DeleteTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.DeleteTeam(id: 789), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
             }
             
             context("Testing Player API calls") {
@@ -293,7 +519,7 @@ class RGBYCCHAPITest: QuickSpec {
                 
                 it("should return one player when searching by keyword") {
                     
-                    let expectation = self.expectationWithDescription("SearchPlayersByIdsCompletion")
+                    let expectation = self.expectationWithDescription("SearchPlayersByKeywordCompletion")
                     
                     do {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchPlayersByKeyword(keyword: "rugg"), completionBlock: { (results) -> Void in
