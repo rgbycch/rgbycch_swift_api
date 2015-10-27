@@ -158,6 +158,14 @@ class RGBYCCHAPITest: QuickSpec {
                     expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/789.json"))
                 }
                 
+                it("should be able to construct the url correctly for adding a player to a team call") {
+                    
+                    let teamRequest = RGBYCCHAPI.AddPlayerToTeam(teamId: 777, playerId: 123).request
+                    let teamRequestURLString = teamRequest.request?.URL?.absoluteString
+                    
+                    expect(teamRequestURLString).to(equal("http://api.rgbycch-rest.dev/teams/777.json"))
+                }
+                
                 it("should be able to execute a request to get a team") {
                     
                     let expectation = self.expectationWithDescription("GetTeamByIdCompletion")
