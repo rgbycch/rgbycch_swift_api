@@ -326,6 +326,26 @@ class RGBYCCHAPITest: QuickSpec {
                     }
                     self.waitForExpectationsWithTimeout(1, handler: nil)
                 }
+                
+                it("should return the player which was just added when AddPlayerToTeam is invoked") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateTeamAddPlayerCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.AddPlayerToTeam(teamId: 777, playerId: 123), completionBlock: { (results) -> Void in
+                            if let teams = results as? [Team] {
+                                XCTAssert(teams.count == 1)
+                                let team = teams[0]
+                                XCTAssert(team.players.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
             }
             
             context("Testing Player API calls") {

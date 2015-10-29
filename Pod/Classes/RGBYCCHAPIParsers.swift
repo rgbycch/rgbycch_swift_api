@@ -35,6 +35,7 @@ enum CommonParserConstants : String {
     case team = "team"
     case teams = "teams"
     case title = "title"
+    case players = "players"
 }
 
 enum UserParserConstants : String {
@@ -47,7 +48,6 @@ enum PlayerParserConstants : String {
     case nickName = "nick_name"
     case dob = "dob"
     case phone_number = "phone_number"
-    case players = "players"
     case player = "player"
 }
 
@@ -88,7 +88,7 @@ public class RGBYCCHAPITeamsParser : RGBYCCHAPIParser {
     public func parse(json:JSON) throws -> ([AnyObject]?) {
         let teamParser = RGBYCCHAPITeamParser()
         let teams = json[CommonParserConstants.teams.rawValue].arrayValue
-        var parsedTeams:Array<AnyObject> = []
+        var parsedTeams = [Team]()
         for entry in teams {
             let team = teamParser.parseTeam(entry)
             parsedTeams.append(team)
@@ -101,7 +101,18 @@ public class RGBYCCHAPIUpdateTeamParser : RGBYCCHAPIParser {
     
     public func parse(json:JSON) throws -> ([AnyObject]?) {
         let teamParser = RGBYCCHAPITeamParser()
-        let team = teamParser.parseTeam(json[CommonParserConstants.team.rawValue])
+        let teamJSON = json[CommonParserConstants.team.rawValue]
+        let team = teamParser.parseTeam(teamJSON)
+        let players = teamJSON[CommonParserConstants.players.rawValue].arrayValue
+        if players.count > 0 {
+            let playerParser = RGBYCCHAPIPlayerParser()
+            var parsedPlayers = [Player]()
+            for entry in players {
+                let player = playerParser.parsePlayer(entry)
+                parsedPlayers.append(player)
+            }
+            team.players = parsedPlayers
+        }
         return ([team])
     }
 }
@@ -132,8 +143,8 @@ public class RGBYCCHAPIPlayersParser : RGBYCCHAPIParser {
     
     public func parse(json:JSON) throws -> ([AnyObject]?) {
         let playerParser = RGBYCCHAPIPlayerParser()
-        let players = json[PlayerParserConstants.players.rawValue].arrayValue
-        var parsedPlayers:Array<AnyObject> = []
+        let players = json[CommonParserConstants.players.rawValue].arrayValue
+        var parsedPlayers = [AnyObject]()
         for entry in players {
             let player = playerParser.parsePlayer(entry)
             parsedPlayers.append(player)

@@ -57,10 +57,11 @@ extension RGBYCCHAPI {
         .CreateTeam(_, _):
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _),
-        .UpdateTeam(_, _, _),
-        .AddPlayerToTeam(_, _),
-        .RemovePlayerFromTeam(_, _):
+        .UpdateTeam(_, _, _):
             return Alamofire.Method.PATCH
+        case .AddPlayerToTeam(_, _),
+        .RemovePlayerFromTeam(_, _):
+            return Alamofire.Method.PUT
         case .DeletePlayer(_),
         .DeleteTeam(_):
             return Alamofire.Method.DELETE
@@ -131,8 +132,7 @@ extension RGBYCCHAPI {
         case .CreateSession(_, _):
             return RGBYCCHAPIUserParser()
         case .GetTeamById(_),
-        .CreateTeam(_, _),
-        .DeleteTeam(_):
+        .CreateTeam(_, _):
             return RGBYCCHAPITeamParser()
         case .GetTeamsByIds(_),
         .SearchTeamsByKeyword(_):
@@ -142,9 +142,11 @@ extension RGBYCCHAPI {
         .RemovePlayerFromTeam(_, _):
             return RGBYCCHAPIUpdateTeamParser()
         case .GetPlayerById(_),
-        .CreatePlayer(_, _, _, _, _, _),
-        .DeletePlayer(_):
+        .CreatePlayer(_, _, _, _, _, _):
             return RGBYCCHAPIPlayerParser()
+        case .DeletePlayer(_),
+        .DeleteTeam(_):
+            return RGBYCCHAPIDeletionParser()
         case .GetPlayersByIds(_),
         .SearchPlayersByKeyword(_):
             return RGBYCCHAPIPlayersParser()
