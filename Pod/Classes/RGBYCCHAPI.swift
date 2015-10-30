@@ -178,8 +178,8 @@ extension RGBYCCHAPI {
     }
     private func digestAddRemovePlayerParams(let teamId:Int32, let playerId:Int32) -> [String: AnyObject] {
         var params = [String : NSNumber]()
-        params[ParameterConstants.team_ids.rawValue] = NSNumber(int: teamId)
-        params[ParameterConstants.player_id.rawValue] = NSNumber(int: playerId)
+        params[ParameterConstants.team_id.rawValue] = NSNumber(int: teamId)
+        params[ParameterConstants.identifier.rawValue] = NSNumber(int: playerId)
         return params
     }
 }
@@ -280,7 +280,7 @@ private enum ParameterConstants : String {
     case title = "title"
     case club_id = "club_id"
     case team_id = "team_id"
-    case player_id = "player_id"
+    case identifier = "id"
 }
 
 private enum HeaderConstants : String {
