@@ -48,7 +48,13 @@ class RGBYCCHAPITest: QuickSpec {
                     "http://api.rgbycch-rest.dev/players?keyword=rugg" : "search_players.json",
                     "http://api.rgbycch-rest.dev/players.json" : "create_player.json",
                     "http://api.rgbycch-rest.dev/players/789.json" : "delete_player.json",
-                    "http://api.rgbycch-rest.dev/players/456.json" : "update_player.json"]
+                    "http://api.rgbycch-rest.dev/players/456.json" : "update_player.json",
+                    "http://api.rgbycch-rest.dev/clubs/123.json" : "get_club_by_id.json",
+                    "http://api.rgbycch-rest.dev/clubs?club_ids=123%2C456" : "get_clubs_by_ids.json",
+                    "http://api.rgbycch-rest.dev/clubs?keyword=clon" : "search_clubs.json",
+                    "http://api.rgbycch-rest.dev/clubs.json" : "create_club.json",
+                    "http://api.rgbycch-rest.dev/clubs/789.json" : "delete_club.json",
+                    "http://api.rgbycch-rest.dev/clubs/456.json" : "update_club.json"]
                 for (absoluteString, fileName) in map {
                     OHHTTPStubs.stubRequestsPassingTest({$0.URL!.absoluteString == absoluteString}) { _ in
                         let fixture = OHPathForFile(fileName, self.dynamicType)
@@ -565,6 +571,240 @@ class RGBYCCHAPITest: QuickSpec {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdatePlayer(id: 456, firstName: "a", lastName: "b", nickName: "c", dob: NSDate(), email: "e", phoneNumber: "f"), completionBlock: { (results) -> Void in
                             if let players = results as? [Player] {
                                 XCTAssert(players.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+            }
+            
+            context("Testing Club API calls") {
+                
+                it("should be able to construct the url correctly for a GetClubById call") {
+                    
+                    let clubRequest = RGBYCCHAPI.GetClubById(id: 123).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/123.json"))
+                }
+                
+                it("should be able to construct the url correctly for a GetPlayersByIds call") {
+                    
+                    let clubRequest = RGBYCCHAPI.GetClubsByIds(ids: [123, 456]).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs?club_ids=123%2C456"))
+                }
+                
+                it("should be able to construct the url correctly for a SearchClubsByKeyword call") {
+                    
+                    let clubRequest = RGBYCCHAPI.SearchClubsByKeyword(keyword: "clon").request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs?keyword=clon"))
+                }
+                
+                it("should be able to construct the url correctly for a CreateClub call") {
+                    
+                    let clubRequest = RGBYCCHAPI.CreateClub(title: "club title", url: "http://www.google.com", founded: NSDate()).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs.json"))
+                }
+                
+                it("should be able to construct the url correctly for a UpdateClub call") {
+                    
+                    let clubRequest = RGBYCCHAPI.UpdateClub(id: 456, title: "Updated Title", url: "http://www.updated.com", founded:NSDate()).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/456.json"))
+                }
+                
+                it("should be able to construct the url correctly for a DeleteClub call") {
+                    
+                    let clubRequest = RGBYCCHAPI.DeleteClub(id: 789).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/789.json"))
+                }
+                
+                it("should be able to execute a request to get a club") {
+                    
+                    let expectation = self.expectationWithDescription("GetClubByIdCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetClubById(id: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to get a list of clubs by id") {
+                    
+                    let expectation = self.expectationWithDescription("GetClubsByIdsCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetClubsByIds(ids: [123, 456]), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to search for a list of clubs by keyword") {
+                    
+                    let expectation = self.expectationWithDescription("SearchClubsByKeywordCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchClubsByKeyword(keyword: "clon"), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to create a new club") {
+                    
+                    let expectation = self.expectationWithDescription("CreateClubCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateClub(title:"Club Title", url: "http://google.com", founded: NSDate()), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to update an existing club") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateClubCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdateClub(id: 456, title:"Club Title", url: "http://google.com", founded: NSDate()), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to delete an existing club") {
+                    
+                    let expectation = self.expectationWithDescription("DeleteClubCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.DeleteClub(id: 789), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one club for a get club by id request after parsing") {
+                    
+                    let expectation = self.expectationWithDescription("GetClubCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetClubById(id: 123), completionBlock: { (results) -> Void in
+                            if let clubs = results as? [Club] {
+                                let club:Club = clubs[0]
+                                expect(club.identifier).to(equal(123))
+                                expect(club.title).to(equal("Club Title"))
+                                expect(club.url).to(equal("http://google.com"))
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return two clubs when searching by multiple ids") {
+                    
+                    let expectation = self.expectationWithDescription("GetClubsByIdsCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.GetClubsByIds(ids: [123, 456]), completionBlock: { (results) -> Void in
+                            if let clubs = results as? [Club] {
+                                XCTAssert(clubs.count == 2)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one club when searching by keyword") {
+                    
+                    let expectation = self.expectationWithDescription("SearchClubsByKeywordCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.SearchClubsByKeyword(keyword: "clon"), completionBlock: { (results) -> Void in
+                            if let clubs = results as? [Club] {
+                                XCTAssert(clubs.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one club when creating a new club") {
+                    
+                    let expectation = self.expectationWithDescription("CreateClubCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.CreateClub(title: "Club Title", url: "http://google.com", founded: NSDate()), completionBlock: { (results) -> Void in
+                            if let clubs = results as? [Club] {
+                                XCTAssert(clubs.count == 1)
+                                expectation.fulfill()
+                            } else {
+                                XCTFail("api call failed")
+                            }
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should return one club when updating a club") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateClubCompletion")
+                    
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.UpdateClub(id: 456, title:"Updated Title", url: "http://updated.com", founded:nil), completionBlock: { (results) -> Void in
+                            if let clubs = results as? [Club] {
+                                XCTAssert(clubs.count == 1)
                                 expectation.fulfill()
                             } else {
                                 XCTFail("api call failed")

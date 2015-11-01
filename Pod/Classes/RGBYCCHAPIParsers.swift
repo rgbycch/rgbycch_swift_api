@@ -35,6 +35,9 @@ enum CommonParserConstants : String {
     case team = "team"
     case teams = "teams"
     case title = "title"
+    case clubs = "clubs"
+    case club = "club"
+    case url = "url"
 }
 
 enum UserParserConstants : String {
@@ -49,6 +52,10 @@ enum PlayerParserConstants : String {
     case phone_number = "phone_number"
     case players = "players"
     case player = "player"
+}
+
+enum ClubParserConstants : String {
+    case founded = "founded"
 }
 
 public protocol RGBYCCHAPIParser {
@@ -155,5 +162,50 @@ public class RGBYCCHAPIUpdatePlayerParser : RGBYCCHAPIParser {
         let playerParser = RGBYCCHAPIPlayerParser()
         let player = playerParser.parsePlayer(json[PlayerParserConstants.player.rawValue])
         return ([player])
+    }
+}
+
+public class RGBYCCHAPIClubParser : RGBYCCHAPIParser {
+
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        return ([self.parseClub(json)])
+    }
+    
+    public func parseClub(json:JSON) -> Club {
+        let club = Club()
+        let clubDictionary = json[CommonParserConstants.club.rawValue]
+        club.identifier = clubDictionary[CommonParserConstants.identifier.rawValue].int32Value
+        club.title = clubDictionary[CommonParserConstants.title.rawValue].stringValue
+        club.url = clubDictionary[CommonParserConstants.url.rawValue].stringValue
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = RGBYCCHAPIDateFormat.dateFormat.rawValue
+        let dateString:NSString = json[ClubParserConstants.founded.rawValue].stringValue
+        if dateString.length > 0 {
+            club.founded = formatter.dateFromString(dateString as String)!
+        }
+        return club
+    }
+}
+
+public class RGBYCCHAPIClubsParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let clubParser = RGBYCCHAPIClubParser()
+        let clubs = json[CommonParserConstants.clubs.rawValue].arrayValue
+        var parsedClubs = [AnyObject]()
+        for entry in clubs {
+            let club = clubParser.parseClub(entry)
+            parsedClubs.append(club)
+        }
+        return (parsedClubs)
+    }
+}
+
+public class RGBYCCHAPIUpdateClubParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let clubParser = RGBYCCHAPIClubParser()
+        let club = clubParser.parseClub(json[CommonParserConstants.club.rawValue])
+        return ([club])
     }
 }
