@@ -47,6 +47,13 @@ public enum RGBYCCHAPI {
     case CreatePlayer(firstName: String, lastName: String, nickName: String?, dob: NSDate?, email: String?, phoneNumber: String?)
     case UpdatePlayer(id: Int32, firstName: String?, lastName: String?, nickName: String?, dob: NSDate?, email: String?, phoneNumber: String?)
     case DeletePlayer(id: Int32)
+    // clubs
+    case GetClubById(id: Int32)
+    case GetClubsByIds(ids: [Int32])
+    case SearchClubsByKeyword(keyword: String)
+    case CreateClub(title: String, url: String?, founded: NSDate?)
+    case UpdateClub(id: Int32, title: String?, url: String?, founded: NSDate?)
+    case DeleteClub(id: Int32)
 }
 
 extension RGBYCCHAPI {
@@ -54,15 +61,18 @@ extension RGBYCCHAPI {
         switch self {
         case .CreateSession(_, _),
         .CreatePlayer(_, _, _, _, _, _),
-        .CreateTeam(_, _):
+        .CreateTeam(_, _),
+        .CreateClub(_, _, _):
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _),
         .UpdateTeam(_, _, _),
         .AddPlayerToTeam(_, _),
-        .RemovePlayerFromTeam(_, _):
+        .RemovePlayerFromTeam(_, _),
+        .UpdateClub(_, _, _, _):
             return Alamofire.Method.PATCH
         case .DeletePlayer(_),
-        .DeleteTeam(_):
+        .DeleteTeam(_),
+        .DeleteClub(_):
             return Alamofire.Method.DELETE
         default : return Alamofire.Method.GET
         }
@@ -91,9 +101,17 @@ extension RGBYCCHAPI {
         case .SearchPlayersByKeyword(let keyword) :
             return [ParameterConstants.keyword.rawValue: keyword]
         case .CreatePlayer(let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
-            return digestOptionalParameters(firstName, lastName:lastName, nickName:nickName, dob: dob, email: email, phoneNumber: phoneNumber)
+            return digestOptionalTeamParameters(firstName, lastName:lastName, nickName:nickName, dob: dob, email: email, phoneNumber: phoneNumber)
         case .UpdatePlayer(_, let firstName, let lastName, let nickName, let dob, let email, let phoneNumber):
-            return digestOptionalParameters(firstName, lastName:lastName, nickName:nickName, dob: dob, email: email, phoneNumber: phoneNumber)
+            return digestOptionalTeamParameters(firstName, lastName:lastName, nickName:nickName, dob: dob, email: email, phoneNumber: phoneNumber)
+        case .GetClubsByIds(let ids):
+            return [ParameterConstants.club_ids.rawValue: ids.stringified()]
+        case .SearchClubsByKeyword(let keyword):
+            return [ParameterConstants.keyword.rawValue: keyword]
+        case .CreateClub(let title, let url, let founded):
+            return digestOptionalClubParameters(title, url: url, founded: founded)
+        case .UpdateClub(_, let title, let url, let founded):
+            return digestOptionalClubParameters(title, url: url, founded: founded)
         default: return nil
         }
     }
@@ -105,7 +123,9 @@ extension RGBYCCHAPI {
         .CreatePlayer(_, _, _, _, _, _),
         .UpdatePlayer(_, _, _, _, _, _, _),
         .AddPlayerToTeam(_, _),
-        .RemovePlayerFromTeam(_, _):
+        .RemovePlayerFromTeam(_, _),
+        .CreateClub(_, _, _),
+        .UpdateClub(_, _, _, _):
             return .JSON
         default: return .URL
         }
@@ -150,9 +170,18 @@ extension RGBYCCHAPI {
             return RGBYCCHAPIPlayersParser()
         case .UpdatePlayer(_, _, _, _, _, _, _):
             return RGBYCCHAPIUpdatePlayerParser()
+        case .GetClubById(_),
+        .CreateClub(_, _, _),
+        .DeleteClub(_):
+            return RGBYCCHAPIClubParser()
+        case .GetClubsByIds(_),
+        .SearchClubsByKeyword(_):
+            return RGBYCCHAPIClubsParser()
+        case .UpdateClub(_, _, _, _):
+            return RGBYCCHAPIUpdateClubParser()
         }
     }
-    private func digestOptionalParameters(let firstName:String?, let lastName:String?, let nickName:String?, let dob:NSDate?, let email:String?, let phoneNumber:String?) -> [String : String] {
+    private func digestOptionalTeamParameters(let firstName:String?, let lastName:String?, let nickName:String?, let dob:NSDate?, let email:String?, let phoneNumber:String?) -> [String : String] {
         var params = [String : String]()
         if let unwrappedFirstName = firstName {
             params[PlayerParserConstants.firstName.rawValue] = unwrappedFirstName
@@ -173,6 +202,21 @@ extension RGBYCCHAPI {
         }
         if let unwrappedPhoneNumber = phoneNumber {
             params[PlayerParserConstants.phone_number.rawValue] = unwrappedPhoneNumber
+        }
+        return params
+    }
+    private func digestOptionalClubParameters(let title:String?, let url:String?, let founded:NSDate?) -> [String : String] {
+        var params = [String : String]()
+        if let unwrappedTitle = title {
+            params[ParameterConstants.title.rawValue] = unwrappedTitle
+        }
+        if let unwrappedUrl = url {
+            params[ParameterConstants.url.rawValue] = unwrappedUrl
+        }
+        if let unwrappedFounded = founded {
+            let formatter = NSDateFormatter()
+            formatter.dateFormat = RGBYCCHAPIDateFormat.dateFormat.rawValue
+            params[ParameterConstants.founded.rawValue] = formatter.stringFromDate(unwrappedFounded)
         }
         return params
     }
@@ -262,6 +306,17 @@ extension RGBYCCHAPI : Path {
             return "/players/\(id).json"
         case .CreatePlayer(_, _, _, _, _, _):
             return "/players.json"
+        case .GetClubById(let id):
+            return "/clubs/\(id).json"
+        case .UpdateClub(let id, _, _, _):
+            return "/clubs/\(id).json"
+        case .GetClubsByIds(_),
+        .SearchClubsByKeyword(_):
+            return "/clubs"
+        case .DeleteClub(let id):
+            return "/clubs/\(id).json"
+        case .CreateClub(_, _, _):
+            return "/clubs.json"
         }
     }
 }
@@ -281,6 +336,9 @@ private enum ParameterConstants : String {
     case club_id = "club_id"
     case team_id = "team_id"
     case identifier = "id"
+    case club_ids = "club_ids"
+    case url = "url"
+    case founded = "founded"
 }
 
 private enum HeaderConstants : String {
