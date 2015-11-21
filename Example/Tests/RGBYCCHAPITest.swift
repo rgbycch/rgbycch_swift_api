@@ -584,7 +584,7 @@ class RGBYCCHAPITest: QuickSpec {
                 }
             }
             
-            context("Testing Club API calls") {
+            context("Testing Clubs API calls") {
                 
                 it("should be able to construct the url correctly for a GetClubById call") {
                     
@@ -632,6 +632,22 @@ class RGBYCCHAPITest: QuickSpec {
                     let clubRequestURLString = clubRequest.request?.URL?.absoluteString
                     
                     expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/789.json"))
+                }
+                
+                it("should be able to construct the url correctly for a AddTeamToClub API call") {
+                    
+                    let clubRequest = RGBYCCHAPI.AddTeamToClub(clubId: 123, teamId: 456).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/123/add_team.json"))
+                }
+                
+                it("should be able to construct the url correctly for a RemoveTeamFromClub API call") {
+                    
+                    let clubRequest = RGBYCCHAPI.RemoveTeamFromClub(clubId: 123, teamId: 456).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/123/remove_team.json"))
                 }
                 
                 it("should be able to execute a request to get a club") {
