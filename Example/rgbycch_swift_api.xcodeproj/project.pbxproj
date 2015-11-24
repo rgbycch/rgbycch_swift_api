@@ -17,6 +17,8 @@
 		4129EC3E1BDBE97800899310 /* get_team_by_id.json in Resources */ = {isa = PBXBuildFile; fileRef = 4129EC3D1BDBE97800899310 /* get_team_by_id.json */; };
 		4129EC401BDBE98900899310 /* get_teams_by_ids.json in Resources */ = {isa = PBXBuildFile; fileRef = 4129EC3F1BDBE98900899310 /* get_teams_by_ids.json */; };
 		4129EC421BDE7A4300899310 /* update_team.json in Resources */ = {isa = PBXBuildFile; fileRef = 4129EC411BDE7A4300899310 /* update_team.json */; };
+		413302D01C04FDC0006223DF /* add_team.json in Resources */ = {isa = PBXBuildFile; fileRef = 413302CF1C04FDC0006223DF /* add_team.json */; };
+		413302D21C04FDD8006223DF /* remove_team.json in Resources */ = {isa = PBXBuildFile; fileRef = 413302D11C04FDD8006223DF /* remove_team.json */; };
 		414438FA1BE008FA00C7FB4F /* add_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 414438F91BE008FA00C7FB4F /* add_player.json */; };
 		414438FC1BE0090900C7FB4F /* remove_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 414438FB1BE0090900C7FB4F /* remove_player.json */; };
 		416A5F521BBD260100493077 /* create_session.json in Resources */ = {isa = PBXBuildFile; fileRef = 416A5F511BBD260100493077 /* create_session.json */; };
@@ -46,6 +48,8 @@
 		4129EC3D1BDBE97800899310 /* get_team_by_id.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = get_team_by_id.json; sourceTree = "<group>"; };
 		4129EC3F1BDBE98900899310 /* get_teams_by_ids.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = get_teams_by_ids.json; sourceTree = "<group>"; };
 		4129EC411BDE7A4300899310 /* update_team.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = update_team.json; sourceTree = "<group>"; };
+		413302CF1C04FDC0006223DF /* add_team.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = add_team.json; sourceTree = "<group>"; };
+		413302D11C04FDD8006223DF /* remove_team.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = remove_team.json; sourceTree = "<group>"; };
 		414438F91BE008FA00C7FB4F /* add_player.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = add_player.json; sourceTree = "<group>"; };
 		414438FB1BE0090900C7FB4F /* remove_player.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = remove_player.json; sourceTree = "<group>"; };
 		416A5F511BBD260100493077 /* create_session.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = create_session.json; sourceTree = "<group>"; };
@@ -120,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				414438F91BE008FA00C7FB4F /* add_player.json */,
+				413302CF1C04FDC0006223DF /* add_team.json */,
 				41BCA3381BE694E700491941 /* create_club.json */,
 				412060031BC04D6100668CAE /* create_player.json */,
 				416A5F511BBD260100493077 /* create_session.json */,
@@ -135,6 +140,7 @@
 				4129EC3F1BDBE98900899310 /* get_teams_by_ids.json */,
 				607FACEA1AFB9204008FA782 /* Info.plist */,
 				414438FB1BE0090900C7FB4F /* remove_player.json */,
+				413302D11C04FDD8006223DF /* remove_team.json */,
 				41BCA3361BE694D300491941 /* search_clubs.json */,
 				410D44631BBA9E870045898B /* search_players.json */,
 				4129EC3B1BDBE94D00899310 /* search_teams.json */,
@@ -237,7 +243,9 @@
 				412060041BC04D6100668CAE /* create_player.json in Resources */,
 				414438FA1BE008FA00C7FB4F /* add_player.json in Resources */,
 				4129EC3E1BDBE97800899310 /* get_team_by_id.json in Resources */,
+				413302D21C04FDD8006223DF /* remove_team.json in Resources */,
 				418D00201BBA64FB00E245FD /* get_player_by_id.json in Resources */,
+				413302D01C04FDC0006223DF /* add_team.json in Resources */,
 				41BCA33B1BE694F800491941 /* delete_club.json in Resources */,
 				41BCA33D1BE6950E00491941 /* update_club.json in Resources */,
 				41BCA3351BE694C000491941 /* get_clubs_by_ids.json in Resources */,
