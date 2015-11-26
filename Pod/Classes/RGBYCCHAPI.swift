@@ -54,6 +54,8 @@ public enum RGBYCCHAPI {
     case CreateClub(title: String, url: String?, founded: NSDate?)
     case UpdateClub(id: Int32, title: String?, url: String?, founded: NSDate?)
     case DeleteClub(id: Int32)
+    case AddTeamToClub(clubId: Int32, teamId: Int32)
+    case RemoveTeamFromClub(clubId: Int32, teamId: Int32)
 }
 
 extension RGBYCCHAPI {
@@ -68,7 +70,9 @@ extension RGBYCCHAPI {
         .UpdateTeam(_, _, _),
         .AddPlayerToTeam(_, _),
         .RemovePlayerFromTeam(_, _),
-        .UpdateClub(_, _, _, _):
+        .UpdateClub(_, _, _, _),
+        .AddTeamToClub(_, _),
+        .RemoveTeamFromClub(_, _):
             return Alamofire.Method.PATCH
         case .DeletePlayer(_),
         .DeleteTeam(_),
@@ -112,6 +116,10 @@ extension RGBYCCHAPI {
             return digestOptionalClubParameters(title, url: url, founded: founded)
         case .UpdateClub(_, let title, let url, let founded):
             return digestOptionalClubParameters(title, url: url, founded: founded)
+        case .AddTeamToClub(let clubId, let teamId):
+            return digestAddRemoveTeamParams(clubId, teamId:teamId)
+        case .RemoveTeamFromClub(let clubId, let teamId):
+            return digestAddRemoveTeamParams(clubId, teamId:teamId)
         default: return nil
         }
     }
@@ -177,7 +185,9 @@ extension RGBYCCHAPI {
         case .GetClubsByIds(_),
         .SearchClubsByKeyword(_):
             return RGBYCCHAPIClubsParser()
-        case .UpdateClub(_, _, _, _):
+        case .UpdateClub(_, _, _, _),
+        .AddTeamToClub(_, _),
+        .RemoveTeamFromClub(_, _):
             return RGBYCCHAPIUpdateClubParser()
         }
     }
@@ -224,6 +234,12 @@ extension RGBYCCHAPI {
         var params = [String : NSNumber]()
         params[ParameterConstants.team_id.rawValue] = NSNumber(int: teamId)
         params[ParameterConstants.identifier.rawValue] = NSNumber(int: playerId)
+        return params
+    }
+    private func digestAddRemoveTeamParams(let clubId:Int32, let teamId:Int32) -> [String: AnyObject] {
+        var params = [String : NSNumber]()
+        params[ParameterConstants.team_id.rawValue] = NSNumber(int: teamId)
+        params[ParameterConstants.identifier.rawValue] = NSNumber(int: clubId)
         return params
     }
 }
@@ -317,6 +333,10 @@ extension RGBYCCHAPI : Path {
             return "/clubs/\(id).json"
         case .CreateClub(_, _, _):
             return "/clubs.json"
+        case .AddTeamToClub(let clubId, _):
+            return "/clubs/\(clubId)/add_team.json"
+        case .RemoveTeamFromClub(let clubId, _):
+            return "/clubs/\(clubId)/remove_team.json"
         }
     }
 }

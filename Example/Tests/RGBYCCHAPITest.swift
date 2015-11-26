@@ -54,7 +54,9 @@ class RGBYCCHAPITest: QuickSpec {
                     "http://api.rgbycch-rest.dev/clubs?keyword=clon" : "search_clubs.json",
                     "http://api.rgbycch-rest.dev/clubs.json" : "create_club.json",
                     "http://api.rgbycch-rest.dev/clubs/789.json" : "delete_club.json",
-                    "http://api.rgbycch-rest.dev/clubs/456.json" : "update_club.json"]
+                    "http://api.rgbycch-rest.dev/clubs/456.json" : "update_club.json",
+                    "http://api.rgbycch-rest.dev/clubs/777/add_team.json" : "add_team.json",
+                    "http://api.rgbycch-rest.dev/clubs/777/remove_team.json" : "remove_team.json"]
                 for (absoluteString, fileName) in map {
                     OHHTTPStubs.stubRequestsPassingTest({$0.URL!.absoluteString == absoluteString}) { _ in
                         let fixture = OHPathForFile(fileName, self.dynamicType)
@@ -584,7 +586,7 @@ class RGBYCCHAPITest: QuickSpec {
                 }
             }
             
-            context("Testing Club API calls") {
+            context("Testing Clubs API calls") {
                 
                 it("should be able to construct the url correctly for a GetClubById call") {
                     
@@ -632,6 +634,22 @@ class RGBYCCHAPITest: QuickSpec {
                     let clubRequestURLString = clubRequest.request?.URL?.absoluteString
                     
                     expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/789.json"))
+                }
+                
+                it("should be able to construct the url correctly for a AddTeamToClub API call") {
+                    
+                    let clubRequest = RGBYCCHAPI.AddTeamToClub(clubId: 777, teamId: 456).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/777/add_team.json"))
+                }
+                
+                it("should be able to construct the url correctly for a RemoveTeamFromClub API call") {
+                    
+                    let clubRequest = RGBYCCHAPI.RemoveTeamFromClub(clubId: 777, teamId: 456).request
+                    let clubRequestURLString = clubRequest.request?.URL?.absoluteString
+                    
+                    expect(clubRequestURLString).to(equal("http://api.rgbycch-rest.dev/clubs/777/remove_team.json"))
                 }
                 
                 it("should be able to execute a request to get a club") {
@@ -708,6 +726,32 @@ class RGBYCCHAPITest: QuickSpec {
                     let expectation = self.expectationWithDescription("DeleteClubCompletion")
                     do {
                         try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.DeleteClub(id: 789), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to add a team to an existing club") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateClubAddTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.AddTeamToClub(clubId: 777, teamId: 123), completionBlock: { (results) -> Void in
+                            expectation.fulfill()
+                        })
+                    } catch {
+                        XCTFail("api call failed with error: \(error)")
+                    }
+                    self.waitForExpectationsWithTimeout(1, handler: nil)
+                }
+                
+                it("should be able to execute a request to remove a team from an existing club") {
+                    
+                    let expectation = self.expectationWithDescription("UpdateClubRemoveTeamCompletion")
+                    do {
+                        try RGBYCCHAPIExecutor.sharedInstance.executeRequest(RGBYCCHAPI.RemoveTeamFromClub(clubId: 777, teamId: 123), completionBlock: { (results) -> Void in
                             expectation.fulfill()
                         })
                     } catch {

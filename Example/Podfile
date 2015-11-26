@@ -3,7 +3,7 @@ use_frameworks!
 
 target 'rgbycch_swift_api_Tests', :exclusive => true do
   pod "rgbycch_swift_api", :path => "../"
-  pod 'Quick', '~> 0.7.0'
-  pod 'Nimble', '~> 2.0.0'
-  pod 'OHHTTPStubs', '~> 4.3.0'
+  pod 'Quick', '~> 0.8.0'
+  pod 'Nimble', '~> 3.0.0'
+  pod 'OHHTTPStubs', '~> 4.6.0'
 end
