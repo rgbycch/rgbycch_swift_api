@@ -56,6 +56,13 @@ public enum RGBYCCHAPI {
     case DeleteClub(id: Int32)
     case AddTeamToClub(clubId: Int32, teamId: Int32)
     case RemoveTeamFromClub(clubId: Int32, teamId: Int32)
+    // event types
+    case GetEventTypeById(id: Int32)
+    case GetEventTypesByIds(ids: [Int32])
+    case SearchEventTypesByKeyword(keyword: String)
+    case CreateEventType(title: String, url: String?)
+    case UpdateEventType(id: Int32, title: String?, url: String?)
+    case DeleteEventType(id: Int32)
 }
 
 extension RGBYCCHAPI {
@@ -64,7 +71,8 @@ extension RGBYCCHAPI {
         case .CreateSession(_, _),
         .CreatePlayer(_, _, _, _, _, _),
         .CreateTeam(_, _),
-        .CreateClub(_, _, _):
+        .CreateClub(_, _, _),
+        .CreateEventType(_, _):
             return Alamofire.Method.POST
         case .UpdatePlayer(_, _, _, _, _, _, _),
         .UpdateTeam(_, _, _),
@@ -72,11 +80,13 @@ extension RGBYCCHAPI {
         .RemovePlayerFromTeam(_, _),
         .UpdateClub(_, _, _, _),
         .AddTeamToClub(_, _),
-        .RemoveTeamFromClub(_, _):
+        .RemoveTeamFromClub(_, _),
+        .UpdateEventType(_, _, _):
             return Alamofire.Method.PATCH
         case .DeletePlayer(_),
         .DeleteTeam(_),
-        .DeleteClub(_):
+        .DeleteClub(_),
+        .DeleteEventType(_):
             return Alamofire.Method.DELETE
         default : return Alamofire.Method.GET
         }
@@ -120,6 +130,14 @@ extension RGBYCCHAPI {
             return digestAddRemoveTeamParams(clubId, teamId:teamId)
         case .RemoveTeamFromClub(let clubId, let teamId):
             return digestAddRemoveTeamParams(clubId, teamId:teamId)
+        case GetEventTypesByIds(let ids):
+            return [ParameterConstants.event_type_ids.rawValue: ids.stringified()]
+        case SearchEventTypesByKeyword(let keyword):
+            return [ParameterConstants.keyword.rawValue: keyword]
+        case CreateEventType(let title, let url):
+            return digestOptionalEventTypeParameters(title, url: url)
+        case UpdateEventType(_, let title, let url):
+            return digestOptionalEventTypeParameters(title, url: url)
         default: return nil
         }
     }
@@ -189,6 +207,15 @@ extension RGBYCCHAPI {
         .AddTeamToClub(_, _),
         .RemoveTeamFromClub(_, _):
             return RGBYCCHAPIUpdateClubParser()
+        case .GetEventTypeById(_),
+        .CreateEventType(_, _),
+        .DeleteEventType(_):
+            return RGBYCCHAPIEventTypeParser()
+        case .GetEventTypesByIds(_),
+        .SearchEventTypesByKeyword(_):
+            return RGBYCCHAPIEventTypesParser()
+        case .UpdateEventType(_, _, _):
+            return RGBYCCHAPIUpdateEventTypeParser()
         }
     }
     private func digestOptionalTeamParameters(let firstName:String?, let lastName:String?, let nickName:String?, let dob:NSDate?, let email:String?, let phoneNumber:String?) -> [String : String] {
@@ -227,6 +254,16 @@ extension RGBYCCHAPI {
             let formatter = NSDateFormatter()
             formatter.dateFormat = RGBYCCHAPIDateFormat.dateFormat.rawValue
             params[ParameterConstants.founded.rawValue] = formatter.stringFromDate(unwrappedFounded)
+        }
+        return params
+    }
+    private func digestOptionalEventTypeParameters(let title:String?, let url:String?) -> [String: AnyObject] {
+        var params = [String : String]()
+        if let unwrappedTitle = title {
+            params[ParameterConstants.title.rawValue] = unwrappedTitle
+        }
+        if let unwrappedUrl = url {
+            params[ParameterConstants.url.rawValue] = unwrappedUrl
         }
         return params
     }
@@ -337,6 +374,17 @@ extension RGBYCCHAPI : Path {
             return "/clubs/\(clubId)/add_team.json"
         case .RemoveTeamFromClub(let clubId, _):
             return "/clubs/\(clubId)/remove_team.json"
+        case .GetEventTypeById(let id):
+            return "/event_types/\(id).json"
+        case .UpdateEventType(let id, _, _):
+            return "/event_types/\(id).json"
+        case .GetEventTypesByIds(_),
+        .SearchEventTypesByKeyword(_):
+            return "/event_types"
+        case .DeleteEventType(let id):
+            return "/event_type/\(id).json"
+        case .CreateEventType(_, _):
+            return "/event_type.json"
         }
     }
 }
@@ -359,6 +407,7 @@ private enum ParameterConstants : String {
     case club_ids = "club_ids"
     case url = "url"
     case founded = "founded"
+    case event_type_ids = "event_type_ids"
 }
 
 private enum HeaderConstants : String {

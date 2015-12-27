@@ -58,6 +58,10 @@ enum ClubParserConstants : String {
     case founded = "founded"
 }
 
+enum EventTypeParserConstants : String {
+    case event_types = "event_types"
+}
+
 public protocol RGBYCCHAPIParser {
     
     func parse(json:JSON) throws -> ([AnyObject]?)
@@ -207,5 +211,44 @@ public class RGBYCCHAPIUpdateClubParser : RGBYCCHAPIParser {
         let clubParser = RGBYCCHAPIClubParser()
         let club = clubParser.parseClub(json[CommonParserConstants.club.rawValue])
         return ([club])
+    }
+}
+
+public class RGBYCCHAPIEventTypeParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        return ([self.parseEventType(json)])
+    }
+    
+    public func parseEventType(json:JSON) -> EventType {
+        let eventType = EventType()
+        let eventTypeDictionary = json[EventTypeParserConstants.event_types.rawValue]
+        eventType.identifier = eventTypeDictionary[CommonParserConstants.identifier.rawValue].int32Value
+        eventType.title = eventTypeDictionary[CommonParserConstants.title.rawValue].stringValue
+        eventType.url = eventTypeDictionary[CommonParserConstants.url.rawValue].stringValue
+        return eventType
+    }
+}
+
+public class RGBYCCHAPIEventTypesParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let eventTypeParser = RGBYCCHAPIEventTypeParser()
+        let eventTypes = json[EventTypeParserConstants.event_types.rawValue].arrayValue
+        var parsedEventTypes = [AnyObject]()
+        for entry in eventTypes {
+            let eventType = eventTypeParser.parseEventType(entry)
+            parsedEventTypes.append(eventType)
+        }
+        return (parsedEventTypes)
+    }
+}
+
+public class RGBYCCHAPIUpdateEventTypeParser : RGBYCCHAPIParser {
+    
+    public func parse(json:JSON) throws -> ([AnyObject]?) {
+        let eventTypeParser = RGBYCCHAPIEventTypeParser()
+        let eventType = eventTypeParser.parseEventType(json[EventTypeParserConstants.event_types.rawValue])
+        return ([eventType])
     }
 }
